@@ -1,5 +1,5 @@
 :root {
-    --primary: #7c3aed; /* Roxo Vibrante */
+    --primary: #7c3aed; 
     --primary-dark: #6d28d9; 
     --discord: #5865F2;
     --bg-main: #1c1f2e; 
@@ -129,7 +129,6 @@ input[type="radio"]:checked + .label-loss { border-color: var(--danger); color: 
 .chip span { cursor: pointer; background: rgba(0,0,0,0.2); width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
 .chip span:hover { background: rgba(0,0,0,0.4); }
 
-/* ESTILOS DO CARRINHO */
 .card-cart { display: flex; flex-direction: column; }
 .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 
@@ -185,11 +184,36 @@ input[type="radio"]:checked + .label-loss { border-color: var(--danger); color: 
     text-align: center;
 }
 
-/* ESTILOS DA PRODUÇÃO */
+/* CAIXA DE DIVULGAÇÃO */
+.copy-card {
+    background-color: var(--bg-input);
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    color: var(--text-main);
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: monospace;
+    white-space: pre-line;
+    line-height: 1.5;
+}
+.copy-card:hover {
+    border-color: var(--primary);
+    background-color: rgba(124, 58, 237, 0.1);
+    transform: translateY(-2px);
+}
+.copy-card:active {
+    transform: scale(0.98);
+}
+
 .table-container { overflow-x: auto; margin-top: 20px; }
 table { width: 100%; border-collapse: collapse; }
-th { text-align: left; color: var(--primary); padding: 10px; border-bottom: 2px solid var(--border); font-size: 0.85rem; text-transform: uppercase; white-space: nowrap;}
-td { padding: 10px; border-bottom: 1px solid var(--border); color: var(--text-muted); }
+/* CABEÇALHO ROXO DA TABELA DE PRODUÇÃO */
+table thead tr { background-color: var(--primary); }
+table thead th { color: white; border-bottom: none; padding: 12px; font-size: 0.85rem; text-transform: uppercase; white-space: nowrap; text-align: left; }
+
+td { padding: 12px; border-bottom: 1px solid var(--border); color: var(--text-muted); }
 tr:hover td { background: rgba(255,255,255,0.02); color: var(--text-main); }
 .prod-input { width: 70px; padding: 5px; text-align: center; }
 
