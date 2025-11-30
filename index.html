@@ -15,6 +15,7 @@
         <button class="nav-btn" onclick="app.switchTab('acoes', event)">⚔️ Ações</button>
         <button class="nav-btn active" onclick="app.switchTab('vendas', event)">💰 Vendas</button>
         <button class="nav-btn" onclick="app.switchTab('producao', event)">🏭 Produção</button>
+        <button class="nav-btn" onclick="app.switchTab('divulgacao', event)">📢 Divulgação</button>
     </nav>
 </header>
 
@@ -32,10 +33,8 @@
                     <option>Loja de Armas</option>
                     <option>Loja de Departamento</option>
                     <option>Banco Fleeca</option>
-                    <option>Banco Central</option>
                     <option>Pacific Standard</option>
                     <option>Nióbio</option>
-                    <option>Observatório</option>
                     <option>Joalheria</option>
                     <option>Ação de Rua (PvP)</option>
                 </select>
@@ -212,6 +211,25 @@
         
         <div class="row actions-row">
             <button class="btn btn-danger-outline" onclick="app.resetProduction()">🗑️ Zerar</button>
+        </div>
+    </div>
+</div>
+
+<div id="divulgacao" class="section">
+    <div class="card" style="max-width: 600px; margin: 0 auto;">
+        <h2>📢 Central de Anúncios</h2>
+        <p style="color:var(--text-muted); margin-bottom: 20px;">Clique nos cartões abaixo para copiar o texto automaticamente.</p>
+        
+        <div class="copy-card" onclick="app.copyAdText(this)">
+            🚨 TROJAN ON! 🚨<br>
+            MUNIÇÃO • COLETE • C4 — entrega rápida e discreta.<br>
+            🧨 Chama no canal: Trojan 🧨
+        </div>
+
+        <div class="copy-card" onclick="app.copyAdText(this)" style="margin-top: 15px;">
+            📦 COMPRAMOS MATERIAIS 📦<br>
+            Alumínio, Cobre, Linha e Fibra.<br>
+            Pagamos bem! Chama no PV.
         </div>
     </div>
 </div>
