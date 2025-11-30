@@ -71,16 +71,6 @@ const app = {
         }, 3000);
     },
 
-    // --- COPY ---
-    copyAdText: function(element) {
-        const textToCopy = element.innerText;
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            this.showToast("Anúncio copiado!");
-        }).catch(err => {
-            this.showToast("Erro ao copiar", "error");
-        });
-    },
-
     // --- AÇÕES ---
     handleEnterParticipant: function(e) { if (e.key === 'Enter') this.addParticipant(); },
     addParticipant: function() {
@@ -126,6 +116,7 @@ const app = {
 
         const color = resultado === 'Vitória' ? 3066993 : 15158332; 
         
+        // 1. Payload Principal (Embed Completa)
         const payloadMain = {
             username: "TrojanHelper",
             embeds: [{
@@ -141,6 +132,8 @@ const app = {
             }]
         };
 
+        // 2. Payload Secundário (Embed com Texto Simples)
+        // Usando 'description' para manter o formato de texto exato
         const payloadLog = {
             username: "Trojan Log",
             embeds: [{
@@ -268,6 +261,7 @@ const app = {
             dateStr = `${dia}/${mes}/${ano}`;
         }
 
+        // 1. Payload Principal (Embed Completa)
         const payloadMain = {
             username: "TrojanHelper",
             embeds: [{
@@ -285,7 +279,8 @@ const app = {
             }]
         };
 
-        // PAYLOAD SECUNDÁRIO COM O TEXTO EXATO NA DESCRIÇÃO DO EMBED
+        // 2. Payload Secundário (Embed com Texto Simples)
+        // O texto vai exatamento como você pediu, mas dentro da 'description' do embed
         const payloadLog = {
             username: "Trojan Log",
             embeds: [{
