@@ -3,7 +3,7 @@
 // ======================================================
 const WEBHOOK_ACOES = "https://discord.com/api/webhooks/1438189798849384560/lote5LpQxF80SDUZ3QdPOj2aHiQ7JtcJWKfTNxErKA0MjhDdQ86vruN74dnNUy0YMowD";
 const WEBHOOK_VENDAS = "https://discord.com/api/webhooks/1434731757953093662/gElahX6G0yY6h-DVQx1RQ8wOu6IJGi-k2M20fEVOgNBy-WT3ztobwuPspLB6hLaeAy6z";
-const WEBHOOK_SECUNDARIA = "https://discord.com/api/webhooks/1440862670570917960/Pvoobn7UESdk4a0UeQw3RQTFQXogZsBvgrox6s-8Sn34lZJyaPX729zOBbn2K_oOJ39R"; 
+const WEBHOOK_SECUNDARIA = "https://discord.com/api/webhooks/1440743055379665136/G9nQ8BPcPkCZzLNiqDagcml_UZquf_QvZyF4MmxG4uCPE6hIV91E2rM94vj6Bf04qtGP"; 
 // ======================================================
 
 const app = {
