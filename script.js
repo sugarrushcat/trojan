@@ -285,7 +285,7 @@ const app = {
             }]
         };
 
-        // PAYLOAD SECUNDÁRIO
+        // PAYLOAD SECUNDÁRIO COM O TEXTO EXATO NA DESCRIÇÃO DO EMBED
         const payloadLog = {
             username: "Trojan Log",
             embeds: [{
