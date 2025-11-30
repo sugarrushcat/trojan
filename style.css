@@ -184,7 +184,7 @@ input[type="radio"]:checked + .label-loss { border-color: var(--danger); color: 
     text-align: center;
 }
 
-/* CAIXA DE DIVULGAÇÃO (Evitando AdBlock com o nome copy-card) */
+/* CAIXA DE DIVULGAÇÃO 
 .copy-card {
     background-color: var(--bg-input);
     border: 2px dashed var(--border);
