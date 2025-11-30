@@ -3,7 +3,7 @@
 // ======================================================
 const WEBHOOK_ACOES = "https://discord.com/api/webhooks/1438189798849384560/lote5LpQxF80SDUZ3QdPOj2aHiQ7JtcJWKfTNxErKA0MjhDdQ86vruN74dnNUy0YMowD";
 const WEBHOOK_VENDAS = "https://discord.com/api/webhooks/1434731757953093662/gElahX6G0yY6h-DVQx1RQ8wOu6IJGi-k2M20fEVOgNBy-WT3ztobwuPspLB6hLaeAy6z";
-const WEBHOOK_SECUNDARIA = "https://discord.com/api/webhooks/1440743055379665136/G9nQ8BPcPkCZzLNiqDagcml_UZquf_QvZyF4MmxG4uCPE6hIV91E2rM94vj6Bf04qtGP"; 
+const WEBHOOK_SECUNDARIA = "https://discord.com/api/webhooks/1440862670570917960/Pvoobn7UESdk4a0UeQw3RQTFQXogZsBvgrox6s-8Sn34lZJyaPX729zOBbn2K_oOJ39R"; 
 // ======================================================
 
 const app = {
@@ -71,6 +71,38 @@ const app = {
         }, 3000);
     },
 
+    // --- COPIA ROBUSTA PARA GITHUB ---
+    copyAdText: function(element) {
+        const textToCopy = element.innerText;
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                this.showToast("Anúncio copiado!");
+            }).catch(err => {
+                this.fallbackCopyText(textToCopy);
+            });
+        } else {
+            this.fallbackCopyText(textToCopy);
+        }
+    },
+    fallbackCopyText: function(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            const successful = document.execCommand('copy');
+            if(successful) this.showToast("Anúncio copiado!");
+            else this.showToast("Erro ao copiar", "error");
+        } catch (err) {
+            this.showToast("Erro grave ao copiar", "error");
+        }
+        document.body.removeChild(textArea);
+    },
+
     // --- AÇÕES ---
     handleEnterParticipant: function(e) { if (e.key === 'Enter') this.addParticipant(); },
     addParticipant: function() {
@@ -116,7 +148,6 @@ const app = {
 
         const color = resultado === 'Vitória' ? 3066993 : 15158332; 
         
-        // 1. Payload Principal (Embed Completa)
         const payloadMain = {
             username: "TrojanHelper",
             embeds: [{
@@ -132,8 +163,6 @@ const app = {
             }]
         };
 
-        // 2. Payload Secundário (Embed com Texto Simples)
-        // Usando 'description' para manter o formato de texto exato
         const payloadLog = {
             username: "Trojan Log",
             embeds: [{
@@ -261,7 +290,6 @@ const app = {
             dateStr = `${dia}/${mes}/${ano}`;
         }
 
-        // 1. Payload Principal (Embed Completa)
         const payloadMain = {
             username: "TrojanHelper",
             embeds: [{
@@ -279,12 +307,10 @@ const app = {
             }]
         };
 
-        // 2. Payload Secundário (Embed com Texto Simples)
-        // O texto vai exatamento como você pediu, mas dentro da 'description' do embed
         const payloadLog = {
             username: "Trojan Log",
             embeds: [{
-                color: 5644438, // Roxo
+                color: 5644438,
                 description: `**Venda:** ${itemsSimple.slice(0, -2)}\n**Data:** ${dateStr}\n**Hora:** ${timeStr}\n**Família para venda:** ${faccao}`
             }]
         };
