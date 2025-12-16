@@ -10,24 +10,37 @@ const app = {
     data: {
         participants: new Set(),
         cart: [],
+        
+        // --- LISTA DE VENDAS (ARMAS) ---
         products: [ 
-            { name: "Munição de PT",       min: 130,   max: 150,   weight: 0 },
-            { name: "Munição de Smg",      min: 260,   max: 300,   weight: 0 },
-            { name: "Munição de Fuzil",    min: 350,   max: 400,   weight: 0 },
-            { name: "Munição de Escopeta", min: 400,   max: 450,   weight: 0 },
-            { name: "C4",                  min: 3000,  max: 3600,  weight: 2.0 },
-            { name: "Colete",              min: 10000, max: 12000, weight: 5.0 }
+            { name: "Fn Five Seven (PT)", min: 53000,  max: 63600,  weight: 1.5 },
+            { name: "HK P7M10 (Fajuta)",  min: 45000,  max: 55000,  weight: 1.0 },
+            { name: "Tec-9 (Sub)",        min: 90000,  max: 110000, weight: 1.75 },
+            { name: "Uzi (Sub)",          min: 120000, max: 140000, weight: 1.25 },
+            { name: "Mtar-21 (Sub)",      min: 150000, max: 170000, weight: 5.0 },
+            { name: "Ak-74 (Fuzil)",      min: 240000, max: 260000, weight: 8.0 },
+            { name: "G36C (Fuzil)",       min: 260000, max: 280000, weight: 8.0 },
+            { name: "Ak Compact (Fuzil)", min: 250000, max: 270000, weight: 2.25 },
+            { name: "Mossberg 590",       min: 260000, max: 280000, weight: 6.0 }
         ],
+        
+        // --- RECEITAS DE PRODUÇÃO (LIMPAS) ---
+        // Ordem Simplificada: [Alumínio, Cobre, Materiais, Projeto]
+        // Índices:                 0        1        2         3
         recipes: [
-            { name: "500 Munição Pt",       mats: [43, 65, 0, 0, 0, 53, 150], weight: 0 },
-            { name: "500 Munição Smg",      mats: [43, 65, 0, 0, 0, 53, 150], weight: 0 },
-            { name: "500 Munição Fuzil",    mats: [43, 65, 0, 0, 0, 53, 150], weight: 0 },
-            { name: "500 Munição Escopeta", mats: [43, 65, 0, 0, 0, 53, 150], weight: 0 },
-            { name: "C4",                   mats: [15, 5, 5, 10, 0, 0, 0],    weight: 2.0 },
-            { name: "Colete",               mats: [41, 0, 22, 0, 35, 0, 0],   weight: 5.0 },
+            { name: "Fn Five Seven",   mats: [17, 13, 26, 25], weight: 1.5 },
+            { name: "HK P7M10",        mats: [17, 13, 26, 25], weight: 1.0 },
+            { name: "Tec-9",           mats: [34, 26, 33, 25], weight: 1.75 },
+            { name: "Uzi",             mats: [48, 39, 38, 35], weight: 1.25 },
+            { name: "Mtar-21",         mats: [51, 39, 38, 35], weight: 5.0 },
+            { name: "Ak-74",           mats: [85, 65, 40, 40], weight: 8.0 },
+            { name: "G36C",            mats: [85, 65, 40, 40], weight: 8.0 },
+            { name: "Ak Compact",      mats: [85, 70, 50, 40], weight: 2.25 },
+            { name: "Mossberg 590",    mats: [90, 75, 50, 40], weight: 6.0 },
         ],
-        matNames: ["Alumínio", "Cobre", "Linha", "Eletrônico Novo", "Fibra", "Materiais", "Projeto"],
-        matWeights: [0.01, 0.01, 0.01, 0.01, 0.10, 0.01, 0.01] 
+        
+        matNames: ["Alumínio", "Cobre", "Materiais", "Projeto"],
+        matWeights: [0.01, 0.01, 0.01, 0.01] 
     },
 
     init: function() {
@@ -71,7 +84,7 @@ const app = {
         }, 3000);
     },
 
-    // --- COPIA ROBUSTA PARA GITHUB ---
+    // --- COPIA ROBUSTA ---
     copyAdText: function(element) {
         const textToCopy = element.innerText;
         if (navigator.clipboard && window.isSecureContext) {
