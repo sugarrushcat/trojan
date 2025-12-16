@@ -8,7 +8,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <link rel="stylesheet" href="style.css?v=3.3">
+    <link rel="stylesheet" href="style.css?v=2.0">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
 </head>
 <body>
@@ -51,7 +51,7 @@
                     <option>Joalheria</option>
                     <option>Helicrash</option>
                     <option>Mesa de Drogas</option>
-                    <option>Ação de Rua</option>
+                    <option>Ação de Rua (PvP)</option>
                 </select>
             </div>
             <div class="col form-group">
@@ -185,23 +185,26 @@
 
 <div id="producao" class="section">
     <div class="card">
-        <h2>Calculadora de Materiais</h2>
+        <h2 style="text-align: center; margin-bottom: 20px;">🏭 Produção</h2>
         
-        <button class="btn btn-primary" onclick="app.loadFromCart()" style="margin-bottom: 20px;">
-            📥 Puxar Itens do Carrinho de Vendas
-        </button>
+        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+            <button class="btn btn-primary" onclick="app.loadFromCart()" style="width: 100%; max-width: 500px; padding: 12px; font-size: 1rem; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);">
+                📥 Puxar Itens do Carrinho de Vendas
+            </button>
+        </div>
 
         <div class="form-group">
-            <label>Buscar Item</label>
-            <input type="text" id="search-producao" onkeyup="app.filterProductionItems()" placeholder="Pesquisar arma...">
+            <input type="text" id="search-producao" onkeyup="app.filterProductionItems()" 
+                   placeholder="🔍 Pesquisar arma para produzir..." 
+                   style="background: rgba(0,0,0,0.2); border: 1px solid var(--border);">
         </div>
         
         <div class="table-container">
             <table id="tabela-producao">
                 <thead>
                     <tr>
-                        <th style="text-align: left;">Item para Produção</th>
-                        <th style="width: 100px; text-align: center;">Quantidade</th>
+                        <th style="text-align: left; padding-left: 15px;">Item</th>
+                        <th style="width: 120px; text-align: center;">Quantidade</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -209,28 +212,33 @@
             </table>
         </div>
 
-        <div class="materials-summary">
-            <h3>Resumo Geral:</h3>
-            <div id="production-weights" class="weights-row" style="display:none;">
-                <div class="weight-box weight-in">
-                    📥 Peso Materiais<br>
-                    <span id="weight-materials-val">0 kg</span>
+        <div class="materials-summary" style="margin-top: 30px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px;">
+            <h3 style="margin-top: 0; font-size: 1rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">Resumo do Pedido</h3>
+            
+            <div id="production-weights" class="weights-row" style="display:none; gap: 15px; flex-wrap: wrap;">
+                <div class="weight-box" style="flex: 1; min-width: 140px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size: 0.8rem; color: #aaa;">📥 Peso Materiais</div>
+                    <span id="weight-materials-val" style="font-size: 1.2rem; font-weight: bold; color: #fff;">0 kg</span>
                 </div>
-                <div class="weight-box weight-out">
-                    📦 Peso Final<br>
-                    <span id="weight-product-val">0 kg</span>
+                <div class="weight-box" style="flex: 1; min-width: 140px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);">
+                    <div style="font-size: 0.8rem; color: var(--success);">💸 Custo Total</div>
+                    <span id="cost-finance-val" style="font-size: 1.2rem; font-weight: bold; color: var(--success);">R$ 0</span>
+                </div>
+                <div class="weight-box" style="flex: 1; min-width: 140px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size: 0.8rem; color: #aaa;">📦 Peso Final</div>
+                    <span id="weight-product-val" style="font-size: 1.2rem; font-weight: bold; color: #fff;">0 kg</span>
                 </div>
             </div>
-            <div id="resumo-materiais" class="tags-container"></div>
+            <div id="resumo-materiais" class="tags-container" style="margin-top: 15px;"></div>
         </div>
 
-        <div id="detalhes-area" style="display: none; margin-top: 30px; border-top: 1px dashed var(--border); padding-top: 20px;">
-            <h3>📋 Detalhamento por Arma:</h3>
-            <div id="lista-detalhada" style="display: flex; flex-direction: column; gap: 10px;"></div>
+        <div id="detalhes-area" style="display: none; margin-top: 30px;">
+            <h3 style="font-size: 1rem; color: #fff; margin-bottom: 15px;">📋 Projetos Detalhados:</h3>
+            <div id="lista-detalhada" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;"></div>
         </div>
         
-        <div class="row actions-row" style="margin-top: 20px;">
-            <button class="btn btn-danger-outline" onclick="app.resetProduction()">🗑️ Zerar</button>
+        <div class="row actions-row" style="margin-top: 20px; justify-content: flex-end;">
+            <button class="btn btn-danger-outline" onclick="app.resetProduction()" style="padding: 8px 20px;">🗑️ Limpar Tudo</button>
         </div>
     </div>
 </div>
@@ -247,14 +255,14 @@
         </div>
 
         <div class="copy-card" onclick="app.copyAdText(this)" style="margin-top: 15px;">
-               🚨🚨TROJAN NA ATIVA 🚨🚨<br>
+            🚨🚨TROJAN ON 🚨🚨<br>
         </div>
     </div>
 </div>
 
 <div id="toast-container"></div>
 
-<script src="script.js?v=1.5" defer></script>
+<script src="script.js?v=1.8" defer></script>
 
 </body>
 </html>
