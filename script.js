@@ -25,8 +25,8 @@ const app = {
         ],
         
         // --- RECEITAS DE PRODUÇÃO ---
+        // OBS: CUSTO POR RECEITA (QUE RENDE 2 ARMAS)
         // Ordem dos Materiais: [Alumínio, Cobre, Materiais, Projeto]
-        // Índices:                 0        1        2         3
         recipes: [
             { name: "Fn Five Seven",   mats: [17, 13, 26, 25], weight: 1.5 },
             { name: "HK P7M10",        mats: [17, 13, 26, 25], weight: 1.0 },
@@ -259,8 +259,6 @@ const app = {
             `;
         });
         
-        // --- CÁLCULO DE PORCENTAGEM (ATUALIZADO) ---
-        // 70% para Facção / 30% para Vendedor
         const vendedorShare = grandTotal * 0.30;
         const faccaoShare = grandTotal * 0.70;
         
@@ -295,7 +293,6 @@ const app = {
             itemsSimple += `${i.name} (${i.qtd}x), `;
         });
 
-        // --- CÁLCULO DE PORCENTAGEM WEBHOOK (ATUALIZADO) ---
         const vendedorShare = grandTotal * 0.30;
         const faccaoShare = grandTotal * 0.70;
         
@@ -368,9 +365,15 @@ const app = {
             const qtd = parseInt(input.value) || 0;
             if(qtd > 0) hasInput = true;
             const recipe = this.data.recipes[input.dataset.idx];
-            totalProdWeight += (qtd * recipe.weight);
+            
+            // --- AJUSTE: CADA RECEITA FAZ 2 ARMAS ---
+            // Se pedir 10 armas, são 5 receitas. Se pedir 1 arma, é 1 receita.
+            const craftsNeeded = Math.ceil(qtd / 2);
+
+            totalProdWeight += (qtd * recipe.weight); // Peso das armas é individual
+            
             recipe.mats.forEach((cost, matIdx) => {
-                const materialQtd = cost * qtd;
+                const materialQtd = cost * craftsNeeded; // Material é baseado na receita
                 totals[matIdx] += materialQtd;
                 totalMatWeight += materialQtd * this.data.matWeights[matIdx];
             });
