@@ -7,8 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-
-    <link rel="stylesheet" href="style.css?v=2.0">
+    <link rel="stylesheet" href="style.css?v=2.1">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
 </head>
 <body>
@@ -100,7 +99,6 @@
         <div class="col">
             <div class="card">
                 <h2>Registrar Venda</h2>
-                
                 <div class="row">
                     <div class="col form-group">
                         <label>Vendedor</label>
@@ -123,7 +121,7 @@
                     </div>
                 </div>
 
-                <hr style="border: 0; border-top: 1px solid var(--border); margin: 15px 0;">
+                <hr class="separator">
 
                 <div class="form-group">
                     <label>Produto</label>
@@ -173,9 +171,9 @@
                 </div>
 
                 <div id="cart-summary-area"></div>
-                <div id="cart-weight-area" class="weight-badge" style="display: none;">⚖️ 0 kg</div>
+                <div id="cart-weight-area" class="weight-badge hidden">⚖️ 0 kg</div>
 
-                <button class="btn btn-primary" style="margin-top: 20px;" onclick="app.sendSaleWebhook()">
+                <button class="btn btn-primary mt-20" onclick="app.sendSaleWebhook()">
                     📡 FINALIZAR E ENVIAR (DISCORD)
                 </button>
             </div>
@@ -185,68 +183,66 @@
 
 <div id="producao" class="section">
     <div class="card">
-        <h2 style="text-align: center; margin-bottom: 20px;">🏭 Produção</h2>
+        <h2 class="text-center mb-20">🏭 Produção</h2>
         
-        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
-            <button class="btn btn-primary" onclick="app.loadFromCart()" style="width: 100%; max-width: 500px; padding: 12px; font-size: 1rem; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);">
+        <div class="flex-center mb-25">
+            <button class="btn btn-primary btn-glow" onclick="app.loadFromCart()">
                 📥 Puxar Itens do Carrinho de Vendas
             </button>
         </div>
 
         <div class="form-group">
             <input type="text" id="search-producao" onkeyup="app.filterProductionItems()" 
-                   placeholder="🔍 Pesquisar arma para produzir..." 
-                   style="background: rgba(0,0,0,0.2); border: 1px solid var(--border);">
+                   placeholder="🔍 Pesquisar arma para produzir..." class="input-search">
         </div>
         
         <div class="table-container">
             <table id="tabela-producao">
                 <thead>
                     <tr>
-                        <th style="text-align: left; padding-left: 15px;">Item</th>
-                        <th style="width: 120px; text-align: center;">Quantidade</th>
+                        <th class="pl-15 text-left">Item</th>
+                        <th class="w-120 text-center">Quantidade</th>
                     </tr>
                 </thead>
-                <tbody>
-                    </tbody>
+                <tbody></tbody>
             </table>
         </div>
 
-        <div class="materials-summary" style="margin-top: 30px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px;">
-            <h3 style="margin-top: 0; font-size: 1rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">Resumo do Pedido</h3>
+        <div class="materials-summary">
+            <h3 class="summary-title">Resumo do Pedido</h3>
             
-            <div id="production-weights" class="weights-row" style="display:none; gap: 15px; flex-wrap: wrap;">
-                <div class="weight-box" style="flex: 1; min-width: 140px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
-                    <div style="font-size: 0.8rem; color: #aaa;">📥 Peso Materiais</div>
-                    <span id="weight-materials-val" style="font-size: 1.2rem; font-weight: bold; color: #fff;">0 kg</span>
+            <div id="production-weights" class="weights-row hidden">
+                <div class="weight-box">
+                    <div class="label-sm">📥 Peso Materiais</div>
+                    <span id="weight-materials-val">0 kg</span>
                 </div>
-                <div class="weight-box" style="flex: 1; min-width: 140px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);">
-                    <div style="font-size: 0.8rem; color: var(--success);">💸 Custo Total</div>
-                    <span id="cost-finance-val" style="font-size: 1.2rem; font-weight: bold; color: var(--success);">R$ 0</span>
+                <div class="weight-box success-box">
+                    <div class="label-sm success-text">💸 Custo Total</div>
+                    <span id="cost-finance-val" class="success-text">R$ 0</span>
                 </div>
-                <div class="weight-box" style="flex: 1; min-width: 140px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
-                    <div style="font-size: 0.8rem; color: #aaa;">📦 Peso Final</div>
-                    <span id="weight-product-val" style="font-size: 1.2rem; font-weight: bold; color: #fff;">0 kg</span>
+                <div class="weight-box">
+                    <div class="label-sm">📦 Peso Final</div>
+                    <span id="weight-product-val">0 kg</span>
                 </div>
             </div>
-            <div id="resumo-materiais" class="tags-container" style="margin-top: 15px;"></div>
+            <div id="resumo-materiais" class="tags-container mt-15"></div>
         </div>
 
-        <div id="detalhes-area" style="display: none; margin-top: 30px;">
-            <h3 style="font-size: 1rem; color: #fff; margin-bottom: 15px;">📋 Projetos Detalhados:</h3>
-            <div id="lista-detalhada" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;"></div>
+        <div id="detalhes-area" class="hidden mt-30">
+            <h3 class="mb-15 text-white fs-1">📋 Projetos Detalhados:</h3>
+            <div id="lista-detalhada" class="grid-list"></div>
         </div>
         
-        <div class="row actions-row" style="margin-top: 20px; justify-content: flex-end;">
-            <button class="btn btn-danger-outline" onclick="app.resetProduction()" style="padding: 8px 20px;">🗑️ Limpar Tudo</button>
+        <div class="row actions-row mt-20 flex-end">
+            <button class="btn btn-danger-outline btn-sm-padding" onclick="app.resetProduction()">🗑️ Limpar Tudo</button>
         </div>
     </div>
 </div>
 
 <div id="divulgacao" class="section">
-    <div class="card" style="max-width: 600px; margin: 0 auto;">
+    <div class="card max-w-600 mx-auto">
         <h2>📢 Central de Anúncios</h2>
-        <p style="color:var(--text-muted); margin-bottom: 20px;">Clique nos cartões abaixo para copiar o texto automaticamente.</p>
+        <p class="text-muted mb-20">Clique nos cartões abaixo para copiar o texto automaticamente.</p>
         
         <div class="copy-card" onclick="app.copyAdText(this)">
             🚨🚨TROJAN NA ATIVA 🚨🚨<br>
@@ -254,7 +250,7 @@
             Chama no canal > Trojan
         </div>
 
-        <div class="copy-card" onclick="app.copyAdText(this)" style="margin-top: 15px;">
+        <div class="copy-card mt-15" onclick="app.copyAdText(this)">
             🚨🚨TROJAN ON 🚨🚨<br>
         </div>
     </div>
@@ -262,7 +258,6 @@
 
 <div id="toast-container"></div>
 
-<script src="script.js?v=1.8" defer></script>
-
+<script src="script.js?v=2.1" defer></script>
 </body>
 </html>
