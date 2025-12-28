@@ -4,29 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel TRJ - Gestão</title>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <link rel="stylesheet" href="style.css?v=2.1">
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
 </head>
 <body>
 
 <header>
     <h1>Painel TRJ</h1>
+    <div class="system-status"><span class="status-dot"></span> Sistema Online</div>
     <nav class="nav-tabs">
         <button class="nav-btn" onclick="app.switchTab('acoes', event)">⚔️ Ações</button>
-        <button class="nav-btn active" onclick="app.switchTab('vendas', event)">💰 Vendas</button>
-        <button class="nav-btn" onclick="app.switchTab('producao', event)">🏭 Produção</button>
+        <button class="nav-btn active" onclick="app.switchTab('vendas', event)">💰 Vendas & Produção</button>
         <button class="nav-btn" onclick="app.switchTab('divulgacao', event)">📢 Divulgação</button>
     </nav>
 </header>
 
 <div id="acoes" class="section">
     <div class="card">
-        <div class="card-header">
-            <h2>Registro de Ação</h2>
-        </div>
+        <div class="card-header"><h2>Registro de Ação</h2></div>
         <div class="row">
             <div class="col form-group">
                 <label>Local da Ação</label>
@@ -56,29 +51,15 @@
             <div class="col form-group">
                 <label>Resultado</label>
                 <div class="radio-group">
-                    <label>
-                        <input type="radio" name="resultado" value="Vitória">
-                        <div class="radio-label label-win">Vitória</div>
-                    </label>
-                    <label>
-                        <input type="radio" name="resultado" value="Derrota">
-                        <div class="radio-label label-loss">Derrota</div>
-                    </label>
+                    <label><input type="radio" name="resultado" value="Vitória"><div class="radio-label label-win">Vitória</div></label>
+                    <label><input type="radio" name="resultado" value="Derrota"><div class="radio-label label-loss">Derrota</div></label>
                 </div>
             </div>
         </div>
-
         <div class="row">
-            <div class="col form-group">
-                <label>Data</label>
-                <input type="date" id="acao-data">
-            </div>
-            <div class="col form-group">
-                <label>Horário</label>
-                <input type="time" id="acao-hora">
-            </div>
+            <div class="col form-group"><label>Data</label><input type="date" id="acao-data"></div>
+            <div class="col form-group"><label>Horário</label><input type="time" id="acao-hora"></div>
         </div>
-
         <div class="form-group">
             <label>Participantes</label>
             <div class="input-group">
@@ -87,10 +68,7 @@
             </div>
             <div id="lista-participantes" class="participants-list"></div>
         </div>
-
-        <button class="btn btn-primary" onclick="app.sendActionWebhook()">
-            📡 Enviar Registro (Discord)
-        </button>
+        <button class="btn btn-primary" onclick="app.sendActionWebhook()">📡 Enviar Registro (Discord)</button>
     </div>
 </div>
 
@@ -100,62 +78,36 @@
             <div class="card">
                 <h2>Registrar Venda</h2>
                 <div class="row">
-                    <div class="col form-group">
-                        <label>Vendedor</label>
-                        <input type="text" id="venda-vendedor" placeholder="Nome do Vendedor...">
-                    </div>
-                    <div class="col form-group">
-                        <label>Facção Compradora</label>
-                        <input type="text" id="venda-faccao" placeholder="Ex: Russia, Turkey...">
-                    </div>
+                    <div class="col form-group"><label>Vendedor</label><input type="text" id="venda-vendedor" placeholder="Nome..."></div>
+                    <div class="col form-group"><label>Facção</label><input type="text" id="venda-faccao" placeholder="Ex: Turkey..."></div>
                 </div>
-
                 <div class="row">
-                    <div class="col form-group">
-                        <label>Data</label>
-                        <input type="date" id="venda-data">
-                    </div>
-                    <div class="col form-group">
-                        <label>Horário</label>
-                        <input type="time" id="venda-hora">
-                    </div>
+                    <div class="col form-group"><label>Data</label><input type="date" id="venda-data"></div>
+                    <div class="col form-group"><label>Horário</label><input type="time" id="venda-hora"></div>
                 </div>
 
                 <hr class="separator">
 
                 <div class="form-group">
-                    <label>Produto</label>
-                    <select id="venda-produto" onchange="app.updatePriceRange()">
-                        <option value="" disabled selected>Selecione o produto...</option>
-                    </select>
+                    <label>SELECIONE O ARMAMENTO:</label>
+                    <div id="sales-catalog" class="catalog-container"></div>
                 </div>
 
-                <div class="form-group">
-                    <label>Tabela de Preço</label>
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="preco-tipo" value="min" onchange="app.setPrice('min')">
-                            <div class="radio-label">Parceria</div>
-                        </label>
-                        <label>
-                            <input type="radio" name="preco-tipo" value="max" onchange="app.setPrice('max')">
-                            <div class="radio-label">Pista</div>
-                        </label>
+                <div id="price-controls" class="hidden-controls">
+                    <div class="form-group">
+                        <label>Tabela de Preço</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="preco-tipo" value="min" onchange="app.setPrice('min')"><div class="radio-label">Parceria</div></label>
+                            <label><input type="radio" name="preco-tipo" value="max" onchange="app.setPrice('max')"><div class="radio-label">Pista</div></label>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col form-group"><label>Valor (R$)</label><input type="number" id="venda-preco" placeholder="0" readonly></div>
+                        <div class="col form-group"><label>Qtd.</label><input type="number" id="venda-qtd" value="1"></div>
+                    </div>
+                    <button class="btn btn-outline" onclick="app.addToCart()">+ ADICIONAR AO CARRINHO</button>
                 </div>
-
-                <div class="row">
-                    <div class="col form-group">
-                        <label>Valor (R$)</label>
-                        <input type="number" id="venda-preco" placeholder="Selecione tabela..." readonly>
-                    </div>
-                    <div class="col form-group">
-                        <label>Qtd.</label>
-                        <input type="number" id="venda-qtd" value="1">
-                    </div>
-                </div>
-
-                <button class="btn btn-outline" onclick="app.addToCart()">+ ADICIONAR AO CARRINHO</button>
+                <div id="select-msg" class="text-center text-muted italic mt-15">Selecione uma arma acima...</div>
             </div>
         </div>
 
@@ -171,70 +123,35 @@
                 </div>
 
                 <div id="cart-summary-area"></div>
-                <div id="cart-weight-area" class="weight-badge hidden">⚖️ 0 kg</div>
-
+                
                 <button class="btn btn-primary mt-20" onclick="app.sendSaleWebhook()">
-                    📡 FINALIZAR E ENVIAR (DISCORD)
+                    📡 FINALIZAR E ENVIAR
                 </button>
+
+                <div class="mt-30 border-top pt-20">
+                    <button class="btn btn-secondary btn-glow" onclick="app.calculateCartProduction()">
+                        🛠️ Calcular Produção do Pedido
+                    </button>
+
+                    <div id="cart-production-area" class="production-summary-box hidden mt-20">
+                        <h3 class="summary-title-styled text-center">Resumo Total</h3>
+                        <div id="mats-list-display" class="tags-container mb-15"></div>
+                        
+                        <h4 class="text-muted text-center mb-10 text-sub uppercase">Detalhamento por Item:</h4>
+                        <div id="sales-production-details" class="flex-column gap-10"></div>
+
+                        <div class="production-weights-grid mt-15">
+                            <div class="weight-pill">
+                                📥 Materiais: <span id="total-mat-weight-display" class="text-white">0 kg</span>
+                            </div>
+                            <div class="weight-pill">
+                                📦 Armas: <span id="total-prod-weight-display" class="text-white">0 kg</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
-    </div>
-</div>
-
-<div id="producao" class="section">
-    <div class="card">
-        <h2 class="text-center mb-20">🏭 Produção</h2>
-        
-        <div class="flex-center mb-25">
-            <button class="btn btn-primary btn-glow" onclick="app.loadFromCart()">
-                📥 Puxar Itens do Carrinho de Vendas
-            </button>
-        </div>
-
-        <div class="form-group">
-            <input type="text" id="search-producao" onkeyup="app.filterProductionItems()" 
-                   placeholder="🔍 Pesquisar arma para produzir..." class="input-search">
-        </div>
-        
-        <div class="table-container">
-            <table id="tabela-producao">
-                <thead>
-                    <tr>
-                        <th class="pl-15 text-left">Item</th>
-                        <th class="w-120 text-center">Quantidade</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-
-        <div class="materials-summary">
-            <h3 class="summary-title">Resumo do Pedido</h3>
-            
-            <div id="production-weights" class="weights-row hidden">
-                <div class="weight-box">
-                    <div class="label-sm">📥 Peso Materiais</div>
-                    <span id="weight-materials-val">0 kg</span>
-                </div>
-                <div class="weight-box success-box">
-                    <div class="label-sm success-text">💸 Custo Total</div>
-                    <span id="cost-finance-val" class="success-text">R$ 0</span>
-                </div>
-                <div class="weight-box">
-                    <div class="label-sm">📦 Peso Final</div>
-                    <span id="weight-product-val">0 kg</span>
-                </div>
-            </div>
-            <div id="resumo-materiais" class="tags-container mt-15"></div>
-        </div>
-
-        <div id="detalhes-area" class="hidden mt-30">
-            <h3 class="mb-15 text-white fs-1">📋 Projetos Detalhados:</h3>
-            <div id="lista-detalhada" class="grid-list"></div>
-        </div>
-        
-        <div class="row actions-row mt-20 flex-end">
-            <button class="btn btn-danger-outline btn-sm-padding" onclick="app.resetProduction()">🗑️ Limpar Tudo</button>
         </div>
     </div>
 </div>
@@ -242,22 +159,15 @@
 <div id="divulgacao" class="section">
     <div class="card max-w-600 mx-auto">
         <h2>📢 Central de Anúncios</h2>
-        <p class="text-muted mb-20">Clique nos cartões abaixo para copiar o texto automaticamente.</p>
-        
         <div class="copy-card" onclick="app.copyAdText(this)">
             🚨🚨TROJAN NA ATIVA 🚨🚨<br>
             🔥NOVIDADE 🔥 PRECISANDO DE ARMAMENTO? ACHOU! PTS • SUB • FUZIL E MAIS!<br>
             Chama no canal > Trojan
         </div>
-
-        <div class="copy-card mt-15" onclick="app.copyAdText(this)">
-            🚨🚨TROJAN ON 🚨🚨<br>
-        </div>
     </div>
 </div>
 
 <div id="toast-container"></div>
-
-<script src="script.js?v=2.1" defer></script>
+<script src="script.js"></script>
 </body>
 </html>
