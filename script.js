@@ -9,13 +9,13 @@ const app = {
         currentSelection: null,
         products: [ 
             { name: "Fn Five Seven (PT)", category: "Pistolas", min: 53000,  max: 63600,  weight: 1.5,  cost: 10000 },
-            { name: "HK P7M10 (Fajuta)",  category: "Pistolas", min: 45000,  max: 55000,  weight: 1.0,  cost: 5000 },
+            { name: "HK P7M10 (Fajuta)",  category: "Pistolas", min: 25000,  max: 30000,  weight: 1.0,  cost: 5000 },
             { name: "Tec-9 (Sub)",        category: "Submetralhadoras", min: 90000,  max: 110000, weight: 1.75, cost: 20000 },
             { name: "Uzi (Sub)",          category: "Submetralhadoras", min: 120000, max: 140000, weight: 1.25, cost: 20000 },
             { name: "Mtar-21 (Sub)",      category: "Submetralhadoras", min: 150000, max: 170000, weight: 5.0,  cost: 25000 },
             { name: "Ak-74 (Fuzil)",      category: "Fuzis", min: 240000, max: 260000, weight: 8.0,  cost: 35000 },
             { name: "G36C (Fuzil)",       category: "Fuzis", min: 260000, max: 280000, weight: 8.0,  cost: 30000 },
-            { name: "Ak Compact (Fuzil)", category: "Fuzis", min: 250000, max: 270000, weight: 2.25, cost: 40000 }, 
+            { name: "Ak Compact (Fuzil)", category: "Fuzis", min: 190000, max: 210000, weight: 2.25, cost: 40000 }, 
             { name: "Mossberg 590",       category: "Escopetas", min: 260000, max: 280000, weight: 6.0,  cost: 35000 }
         ],
         recipes: [
