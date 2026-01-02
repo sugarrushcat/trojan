@@ -61,9 +61,7 @@ const app = {
         participants: new Set(),
         cart: [],
         selectedItemId: null,
-        globalPriceType: 'max',
-        tutorialActive: false,
-        tutorialStepIndex: 0
+        globalPriceType: 'max' // Começa como Pista
     },
     dom: {},
 
@@ -79,8 +77,7 @@ const app = {
             'venda-vendedor', 'venda-faccao', 'venda-data', 'venda-hora', 'venda-preco', 'venda-qtd',
             'sales-catalog', 'price-controls', 'select-msg', 'cart-items', 'cart-summary-area',
             'cart-production-area', 'mats-list-display', 'sales-production-details',
-            'total-mat-weight-display', 'total-prod-weight-display', 'toast-container',
-            'tutorial-box', 'tut-title', 'tut-text', 'tut-progress', 'btn-tut-prev'
+            'total-mat-weight-display', 'total-prod-weight-display', 'toast-container'
         ];
         ids.forEach(id => this.dom[id] = document.getElementById(id));
     },
@@ -141,15 +138,18 @@ const app = {
         }
     },
 
+    // --- CONTROLE GLOBAL DE PREÇOS (MESTRE) ---
     updateGlobalPriceType(type) {
         this.state.globalPriceType = type;
         const typeName = type === 'min' ? 'Parceria' : 'Pista';
 
+        // 1. Atualiza o preço do item que está sendo visualizado (se houver)
         if (this.state.selectedItemId) {
             const item = CATALOG[this.state.selectedItemId];
             this.dom['venda-preco'].value = item.price[type];
         }
 
+        // 2. Atualiza TODOS os itens que já estão no carrinho
         if (this.state.cart.length > 0) {
             this.state.cart.forEach(item => {
                 const cat = CATALOG[item.id];
@@ -167,6 +167,7 @@ const app = {
         }
     },
 
+    // --- VALIDAÇÃO DE INPUT E AJUSTE DE QUANTIDADE ---
     validateInput(inputElement) {
         let val = parseInt(inputElement.value);
         if (isNaN(val) || val < 1) {
@@ -186,7 +187,7 @@ const app = {
         const item = this.state.cart[index];
         const newQtd = item.qtd + amount;
         
-        if (newQtd < 1) return;
+        if (newQtd < 1) return; // Não deixa baixar de 1
 
         item.qtd = newQtd;
         item.total = item.price * item.qtd;
@@ -208,6 +209,7 @@ const app = {
         this.dom['select-msg'].style.display = 'none';
         
         const item = CATALOG[id];
+        // Usa o preço global atual
         this.dom['venda-preco'].value = item.price[this.state.globalPriceType];
         this.dom['venda-qtd'].value = 1;
     },
@@ -222,6 +224,7 @@ const app = {
         if (price === 0) return this.showToast('Preço inválido', 'error');
         const item = CATALOG[id];
 
+        // Adiciona ao carrinho
         this.state.cart.push({
             id: id,
             name: item.name,
@@ -243,10 +246,8 @@ const app = {
         if (this.state.cart.length === 0) {
             container.innerHTML = '<p class="empty-msg">Carrinho vazio</p>';
             this.dom['cart-summary-area'].innerHTML = '';
-            document.body.classList.remove('cart-active');
             return;
         }
-        document.body.classList.add('cart-active');
 
         let html = '';
         let grandTotal = 0;
@@ -255,20 +256,24 @@ const app = {
         this.state.cart.forEach((item, idx) => {
             grandTotal += item.total;
             totalProdCost += (item.cost * item.qtd);
+            
             html += `
                 <div class="cart-item">
                     <div class="cart-item-title">
                         ${item.name}
                         <span class="badge-count-small">x${item.qtd}</span>
                     </div>
+                    
                     <div class="cart-controls-row">
                         <div class="qty-selector-sm">
                             <button class="btn-qty-sm" onclick="app.adjustCartQtd(${idx}, -1)">-</button>
                             <span class="qty-display-sm">${item.qtd}</span>
                             <button class="btn-qty-sm" onclick="app.adjustCartQtd(${idx}, 1)">+</button>
                         </div>
+
                         <div class="cart-item-price">R$ ${item.total.toLocaleString('pt-BR')}</div>
                     </div>
+
                     <div class="btn-remove-item" onclick="app.removeFromCart(${idx})">&times;</div>
                 </div>`;
         });
@@ -319,6 +324,8 @@ const app = {
                 
                 item.recipe.forEach((qtd, i) => {
                     const totalM = qtd * crafts;
+                    
+                    // Se for projeto (índice 3), separa
                     if (i === 3 && totalM > 0) {
                         specificProjects.push({ name: `Proj. ${item.name}`, qtd: totalM });
                         totalMatWeight += totalM * CONFIG.MAT_WEIGHTS[i];
@@ -557,119 +564,6 @@ const app = {
             this.showToast("Erro ao copiar", "error");
         }
         document.body.removeChild(textArea);
-    },
-
-    startTutorial() {
-        this.state.tutorialActive = true;
-        this.state.tutorialStepIndex = 0;
-        this.dom['tutorial-box'].classList.remove('hidden');
-        document.body.classList.add('tutorial-active');
-        this.renderTutorialStep();
-    },
-
-    endTutorial() {
-        this.state.tutorialActive = false;
-        this.dom['tutorial-box'].classList.add('hidden');
-        document.body.classList.remove('tutorial-active');
-        this.cleanHighlights();
-    },
-
-    cleanHighlights() {
-        document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
-        document.querySelectorAll('.tutorial-active-parent').forEach(el => el.classList.remove('tutorial-active-parent'));
-    },
-
-    getTutorialSteps() {
-        return [
-            {
-                tab: 'vendas',
-                elementId: 'area-vendedor-info',
-                title: "1. Identificação",
-                text: "Comece preenchendo o seu nome em <b>Vendedor</b> e o nome da família que está comprando em <b>Facção</b>."
-            },
-            {
-                tab: 'vendas',
-                elementId: 'area-tabela-preco',
-                title: "2. Tabela de Preços",
-                text: "Defina se o preço será <b>Parceria</b> ou <b>Pista</b>. Ao mudar aqui, o sistema atualiza automaticamente todas as armas, inclusive as do carrinho!"
-            },
-            {
-                tab: 'vendas',
-                elementId: 'sales-catalog',
-                title: "3. Catálogo",
-                text: "Selecione a arma desejada e a quantidade. Depois clique em <b>Adicionar ao Carrinho</b>."
-            },
-            {
-                tab: 'vendas',
-                elementId: 'area-carrinho',
-                title: "4. Carrinho",
-                text: "Confira o pedido aqui. Você pode ajustar quantidades com os botões <b>+</b> e <b>-</b>."
-            },
-            {
-                tab: 'vendas',
-                elementId: 'area-producao',
-                title: "5. Produção",
-                text: "Clique em <b>Calcular Produção</b> para ver a lista exata de materiais e projetos necessários."
-            },
-            {
-                tab: 'acoes',
-                elementId: 'acao-tipo',
-                title: "6. Ações",
-                text: "Nesta aba você registra PVP e Ações. Selecione o local e o resultado."
-            },
-            {
-                tab: 'acoes',
-                elementId: 'group-participantes',
-                title: "7. Participantes",
-                text: "Digite o nome de quem foi na ação e aperte Enter."
-            }
-        ];
-    },
-
-    prevTutorialStep() {
-        if (this.state.tutorialStepIndex > 0) {
-            this.cleanHighlights();
-            this.state.tutorialStepIndex--;
-            this.renderTutorialStep();
-        }
-    },
-
-    nextTutorialStep() {
-        const steps = this.getTutorialSteps();
-        this.cleanHighlights();
-        this.state.tutorialStepIndex++;
-
-        if (this.state.tutorialStepIndex >= steps.length) {
-            this.endTutorial();
-            this.showToast("Tutorial concluído! 💜");
-        } else {
-            this.renderTutorialStep();
-        }
-    },
-
-    renderTutorialStep() {
-        const steps = this.getTutorialSteps();
-        const step = steps[this.state.tutorialStepIndex];
-        const totalSteps = steps.length;
-
-        this.switchTab(step.tab);
-
-        this.dom['tut-title'].innerText = step.title;
-        this.dom['tut-text'].innerHTML = step.text;
-        this.dom['tut-progress'].innerText = `${this.state.tutorialStepIndex + 1}/${totalSteps}`;
-        this.dom['btn-tut-prev'].disabled = (this.state.tutorialStepIndex === 0);
-
-        setTimeout(() => {
-            const el = document.getElementById(step.elementId);
-            if (el) {
-                el.classList.add('tutorial-highlight');
-                const parentCard = el.closest('.card');
-                if (parentCard) {
-                    parentCard.classList.add('tutorial-active-parent');
-                }
-                el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-            }
-        }, 400);
     }
 };
 
