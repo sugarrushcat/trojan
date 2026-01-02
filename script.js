@@ -196,10 +196,25 @@ const app = {
         this.state.cart.forEach((item, idx) => {
             grandTotal += item.total;
             totalProdCost += (item.cost * item.qtd);
+            
+            
+            const catalogItem = CATALOG[item.id];
+            const isMin = item.price === catalogItem.price.min;
+            const priceLabel = isMin ? "Parceria" : "Pista";
+            const btnClass = isMin ? "btn-price-min" : "btn-price-max";
+
             html += `
                 <div class="cart-item">
                     <div class="cart-item-title">${item.name} <span class="badge-count">x${item.qtd}</span></div>
-                    <div class="cart-item-price">R$ ${item.total.toLocaleString('pt-BR')}</div>
+                    
+                    <div class="cart-actions-row">
+                        <div class="cart-item-price">R$ ${item.total.toLocaleString('pt-BR')}</div>
+                        
+                        <button class="btn-toggle-price ${btnClass}" onclick="app.toggleCartPrice(${idx})" title="Alternar Valor">
+                            🔄 ${priceLabel}
+                        </button>
+                    </div>
+
                     <div class="btn-remove-item" onclick="app.removeFromCart(${idx})">&times;</div>
                 </div>`;
         });
@@ -214,6 +229,25 @@ const app = {
                 <div class="summary-seller">💰 Vendedor (30%): R$ ${(grandTotal * 0.30).toLocaleString('pt-BR')}</div>
                 <div class="summary-faction">🔥 Facção: R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
             </div>`;
+    },
+
+    toggleCartPrice(index) {
+        const item = this.state.cart[index];
+        const catalogItem = CATALOG[item.id];
+
+        
+        if (item.price === catalogItem.price.min) {
+            item.price = catalogItem.price.max;
+        } else {
+            item.price = catalogItem.price.min;
+        }
+
+        
+        item.total = item.price * item.qtd;
+
+        
+        this.renderCart();
+        this.showToast(`Preço alterado para ${item.price === catalogItem.price.min ? 'Parceria' : 'Pista'}`);
     },
 
     removeFromCart(index) {
@@ -235,21 +269,39 @@ const app = {
     calculateCartProduction() {
         if (this.state.cart.length === 0) return this.showToast('Carrinho vazio!', 'error');
 
-        const totalMats = [0, 0, 0, 0];
+        
+        const totalMats = [0, 0, 0, 0]; 
+        const specificProjects = []; 
+        
         let totalMatWeight = 0;
         let totalProdWeight = 0;
         let detailsHTML = "";
 
         this.state.cart.forEach(item => {
             totalProdWeight += item.weight * item.qtd;
+            
             if (item.recipe) {
                 const crafts = Math.ceil(item.qtd / 2);
                 let itemMatsHTML = "";
                 
                 item.recipe.forEach((qtd, i) => {
                     const totalM = qtd * crafts;
-                    totalMats[i] += totalM;
-                    totalMatWeight += totalM * CONFIG.MAT_WEIGHTS[i];
+                    
+                    
+                    if (i === 3 && totalM > 0) {
+                        specificProjects.push({
+                            name: `Proj. ${item.name}`,
+                            qtd: totalM
+                        });
+                        
+                        totalMatWeight += totalM * CONFIG.MAT_WEIGHTS[i];
+                    } 
+                    
+                    else {
+                        totalMats[i] += totalM;
+                        totalMatWeight += totalM * CONFIG.MAT_WEIGHTS[i];
+                    }
+
                     if (totalM > 0) {
                         itemMatsHTML += `<div class="mat-item-tiny"><span>${CONFIG.MAT_NAMES[i]}:</span> <b>${totalM}</b></div>`;
                     }
@@ -263,10 +315,19 @@ const app = {
             }
         });
 
-        this.dom['mats-list-display'].innerHTML = totalMats.map((t, i) => 
-            t > 0 ? `<div class="mat-tag-pill"><span>${CONFIG.MAT_NAMES[i]}:</span> <b>${t}</b></div>` : ''
-        ).join('');
+        
+        let matsHtml = totalMats.map((t, i) => {
+            
+            if (i === 3) return ''; 
+            return t > 0 ? `<div class="mat-tag-pill"><span>${CONFIG.MAT_NAMES[i]}:</span> <b>${t}</b></div>` : '';
+        }).join('');
 
+      
+        specificProjects.forEach(proj => {
+            matsHtml += `<div class="mat-tag-pill project-tag"><span>${proj.name}:</span> <b>${proj.qtd}</b></div>`;
+        });
+
+        this.dom['mats-list-display'].innerHTML = matsHtml;
         this.dom['sales-production-details'].innerHTML = detailsHTML;
         this.dom['total-mat-weight-display'].innerText = totalMatWeight.toFixed(2).replace('.', ',') + ' kg';
         this.dom['total-prod-weight-display'].innerText = totalProdWeight.toFixed(2).replace('.', ',') + ' kg';
