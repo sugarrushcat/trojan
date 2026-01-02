@@ -138,15 +138,18 @@ const app = {
         }
     },
 
+    // --- CONTROLE GLOBAL DE PREÇOS (MESTRE) ---
     updateGlobalPriceType(type) {
         this.state.globalPriceType = type;
         const typeName = type === 'min' ? 'Parceria' : 'Pista';
 
+        // 1. Atualiza o preço do item que está sendo visualizado (se houver)
         if (this.state.selectedItemId) {
             const item = CATALOG[this.state.selectedItemId];
             this.dom['venda-preco'].value = item.price[type];
         }
 
+        // 2. Atualiza TODOS os itens que já estão no carrinho
         if (this.state.cart.length > 0) {
             this.state.cart.forEach(item => {
                 const cat = CATALOG[item.id];
@@ -164,6 +167,7 @@ const app = {
         }
     },
 
+    // --- VALIDAÇÃO DE INPUT E AJUSTE DE QUANTIDADE ---
     validateInput(inputElement) {
         let val = parseInt(inputElement.value);
         if (isNaN(val) || val < 1) {
@@ -183,7 +187,7 @@ const app = {
         const item = this.state.cart[index];
         const newQtd = item.qtd + amount;
         
-        if (newQtd < 1) return; 
+        if (newQtd < 1) return; // Não deixa baixar de 1
 
         item.qtd = newQtd;
         item.total = item.price * item.qtd;
@@ -205,7 +209,7 @@ const app = {
         this.dom['select-msg'].style.display = 'none';
         
         const item = CATALOG[id];
-        
+        // Usa o preço global atual
         this.dom['venda-preco'].value = item.price[this.state.globalPriceType];
         this.dom['venda-qtd'].value = 1;
     },
@@ -220,6 +224,7 @@ const app = {
         if (price === 0) return this.showToast('Preço inválido', 'error');
         const item = CATALOG[id];
 
+        // Adiciona ao carrinho
         this.state.cart.push({
             id: id,
             name: item.name,
