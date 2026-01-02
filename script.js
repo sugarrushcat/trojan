@@ -60,7 +60,8 @@ const app = {
     state: {
         participants: new Set(),
         cart: [],
-        selectedItemId: null
+        selectedItemId: null,
+        globalPriceType: 'max' // Começa como Pista
     },
     dom: {},
 
@@ -137,6 +138,63 @@ const app = {
         }
     },
 
+    updateGlobalPriceType(type) {
+        this.state.globalPriceType = type;
+        const typeName = type === 'min' ? 'Parceria' : 'Pista';
+
+        if (this.state.selectedItemId) {
+            const item = CATALOG[this.state.selectedItemId];
+            this.dom['venda-preco'].value = item.price[type];
+        }
+
+        if (this.state.cart.length > 0) {
+            this.state.cart.forEach(item => {
+                const cat = CATALOG[item.id];
+                item.price = cat.price[type];
+                item.total = item.price * item.qtd;
+            });
+            
+            this.renderCart();
+            
+            if (!this.dom['cart-production-area'].classList.contains('hidden')) {
+                this.calculateCartProduction();
+            }
+            
+            this.showToast(`Tudo atualizado para ${typeName}`);
+        }
+    },
+
+    validateInput(inputElement) {
+        let val = parseInt(inputElement.value);
+        if (isNaN(val) || val < 1) {
+            inputElement.value = 1;
+        }
+    },
+
+    adjustSalesQtd(amount) {
+        const input = this.dom['venda-qtd'];
+        let val = parseInt(input.value) || 1;
+        val += amount;
+        if (val < 1) val = 1;
+        input.value = val;
+    },
+
+    adjustCartQtd(index, amount) {
+        const item = this.state.cart[index];
+        const newQtd = item.qtd + amount;
+        
+        if (newQtd < 1) return; 
+
+        item.qtd = newQtd;
+        item.total = item.price * item.qtd;
+        
+        this.renderCart();
+        
+        if (!this.dom['cart-production-area'].classList.contains('hidden')) {
+            this.calculateCartProduction();
+        }
+    },
+
     selectItem(id) {
         this.state.selectedItemId = id;
         document.querySelectorAll('.catalog-item').forEach(el => el.classList.remove('selected'));
@@ -145,14 +203,11 @@ const app = {
 
         this.dom['price-controls'].classList.remove('hidden-controls');
         this.dom['select-msg'].style.display = 'none';
-        document.querySelectorAll('input[name="preco-tipo"]').forEach(el => el.checked = false);
-        this.dom['venda-preco'].value = '';
+        
+        const item = CATALOG[id];
+        
+        this.dom['venda-preco'].value = item.price[this.state.globalPriceType];
         this.dom['venda-qtd'].value = 1;
-    },
-
-    setPrice(type) {
-        if (!this.state.selectedItemId) return;
-        this.dom['venda-preco'].value = CATALOG[this.state.selectedItemId].price[type];
     },
 
     addToCart() {
@@ -162,13 +217,13 @@ const app = {
         const price = parseFloat(this.dom['venda-preco'].value) || 0;
         const qtd = parseInt(this.dom['venda-qtd'].value) || 1;
 
-        if (price === 0) return this.showToast('Selecione Parceria ou Pista', 'error');
+        if (price === 0) return this.showToast('Preço inválido', 'error');
         const item = CATALOG[id];
 
         this.state.cart.push({
             id: id,
             name: item.name,
-            price: price,
+            price: price, 
             qtd: qtd,
             total: price * qtd,
             weight: item.weight,
@@ -197,22 +252,21 @@ const app = {
             grandTotal += item.total;
             totalProdCost += (item.cost * item.qtd);
             
-            
-            const catalogItem = CATALOG[item.id];
-            const isMin = item.price === catalogItem.price.min;
-            const priceLabel = isMin ? "Parceria" : "Pista";
-            const btnClass = isMin ? "btn-price-min" : "btn-price-max";
-
             html += `
                 <div class="cart-item">
-                    <div class="cart-item-title">${item.name} <span class="badge-count">x${item.qtd}</span></div>
+                    <div class="cart-item-title">
+                        ${item.name}
+                        <span class="badge-count-small">x${item.qtd}</span>
+                    </div>
                     
-                    <div class="cart-actions-row">
+                    <div class="cart-controls-row">
+                        <div class="qty-selector-sm">
+                            <button class="btn-qty-sm" onclick="app.adjustCartQtd(${idx}, -1)">-</button>
+                            <span class="qty-display-sm">${item.qtd}</span>
+                            <button class="btn-qty-sm" onclick="app.adjustCartQtd(${idx}, 1)">+</button>
+                        </div>
+
                         <div class="cart-item-price">R$ ${item.total.toLocaleString('pt-BR')}</div>
-                        
-                        <button class="btn-toggle-price ${btnClass}" onclick="app.toggleCartPrice(${idx})" title="Alternar Valor">
-                            🔄 ${priceLabel}
-                        </button>
                     </div>
 
                     <div class="btn-remove-item" onclick="app.removeFromCart(${idx})">&times;</div>
@@ -229,25 +283,6 @@ const app = {
                 <div class="summary-seller">💰 Vendedor (30%): R$ ${(grandTotal * 0.30).toLocaleString('pt-BR')}</div>
                 <div class="summary-faction">🔥 Facção: R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
             </div>`;
-    },
-
-    toggleCartPrice(index) {
-        const item = this.state.cart[index];
-        const catalogItem = CATALOG[item.id];
-
-        
-        if (item.price === catalogItem.price.min) {
-            item.price = catalogItem.price.max;
-        } else {
-            item.price = catalogItem.price.min;
-        }
-
-        
-        item.total = item.price * item.qtd;
-
-        
-        this.renderCart();
-        this.showToast(`Preço alterado para ${item.price === catalogItem.price.min ? 'Parceria' : 'Pista'}`);
     },
 
     removeFromCart(index) {
@@ -269,10 +304,8 @@ const app = {
     calculateCartProduction() {
         if (this.state.cart.length === 0) return this.showToast('Carrinho vazio!', 'error');
 
-        
         const totalMats = [0, 0, 0, 0]; 
         const specificProjects = []; 
-        
         let totalMatWeight = 0;
         let totalProdWeight = 0;
         let detailsHTML = "";
@@ -287,17 +320,11 @@ const app = {
                 item.recipe.forEach((qtd, i) => {
                     const totalM = qtd * crafts;
                     
-                    
+                    // Se for projeto (índice 3), separa
                     if (i === 3 && totalM > 0) {
-                        specificProjects.push({
-                            name: `Proj. ${item.name}`,
-                            qtd: totalM
-                        });
-                        
+                        specificProjects.push({ name: `Proj. ${item.name}`, qtd: totalM });
                         totalMatWeight += totalM * CONFIG.MAT_WEIGHTS[i];
-                    } 
-                    
-                    else {
+                    } else {
                         totalMats[i] += totalM;
                         totalMatWeight += totalM * CONFIG.MAT_WEIGHTS[i];
                     }
@@ -315,14 +342,11 @@ const app = {
             }
         });
 
-        
         let matsHtml = totalMats.map((t, i) => {
-            
             if (i === 3) return ''; 
             return t > 0 ? `<div class="mat-tag-pill"><span>${CONFIG.MAT_NAMES[i]}:</span> <b>${t}</b></div>` : '';
         }).join('');
 
-      
         specificProjects.forEach(proj => {
             matsHtml += `<div class="mat-tag-pill project-tag"><span>${proj.name}:</span> <b>${proj.qtd}</b></div>`;
         });
