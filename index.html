@@ -17,7 +17,7 @@
         <h1>Painel TRJ</h1>
         
         <div class="header-controls">
-            <div id="btn-admin-secret" class="system-status" onclick="app.toggleAdmin()" title="Clique para liberar Estatísticas">
+            <div id="btn-admin-secret" class="system-status" onclick="app.toggleAdmin()" title="Clique para liberar acesso Admin">
                 <span class="status-dot"></span> Sistema Online
             </div>
             <button class="btn-tutorial-start" onclick="app.startTutorial()">❓ Como usar?</button>
@@ -25,7 +25,7 @@
     </div>
 
     <nav class="nav-tabs" id="nav-menu">
-        <button class="nav-btn active" onclick="app.switchTab('vendas', event)">💰 Vendas</button>
+        <button class="nav-btn active" onclick="app.switchTab('vendas', event)">💰 Vendas & Produção</button>
         <button class="nav-btn" onclick="app.switchTab('acoes', event)">⚔️ Ações</button>
         <button class="nav-btn" onclick="app.switchTab('divulgacao', event)">📢 Divulgação</button>
         </nav>
@@ -134,40 +134,38 @@
 </div>
 
 <div id="estatisticas" class="section">
-    <div class="card">
-        <div class="cart-header">
-            <h2>📊 Dashboard Mensal (ADMIN)</h2>
-            <button class="btn btn-small" onclick="app.loadDashboard()">🔄 Atualizar</button>
-        </div>
-        <p class="text-muted text-center mb-15">Dados sincronizados em tempo real com a nuvem.</p>
-        
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Vendas Realizadas</h3>
-                <div class="stat-number" id="stat-total-vendas">0</div>
-                <div class="stat-desc">Registros este mês</div>
-            </div>
-
-            <div class="stat-card">
-                <h3>Total Movimentado</h3>
-                <div class="stat-number" id="stat-total-bruto" style="color: #d8b4fe;">R$ 0</div>
-                <div class="stat-desc">Valor Bruto (Soma Total)</div>
-            </div>
-
-            <div class="stat-card highlight">
-                <h3>Lucro Líquido (Facção)</h3>
-                <div class="stat-number" id="stat-faturamento">R$ 0</div>
-                <div class="stat-desc">Após tirar custos e % vendedor</div>
-            </div>
-
-            <div class="stat-card">
-                <h3>Itens Vendidos</h3>
-                <div class="stat-number" id="stat-total-itens">0</div>
-                <div class="stat-desc">Total de unidades</div>
-            </div>
+    <div class="dashboard-header-text text-center mb-15">
+        <p class="text-muted">Dados sincronizados em tempo real com a nuvem.</p>
+        <button class="btn btn-small btn-outline mx-auto" onclick="app.loadDashboard()">🔄 Atualizar Dados</button>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Vendas Realizadas</h3>
+            <div class="stat-number" id="stat-total-vendas">0</div>
+            <div class="stat-desc">Registros este mês</div>
         </div>
 
-        <div class="separator"></div>
+        <div class="stat-card">
+            <h3>Total Movimentado</h3>
+            <div class="stat-number" id="stat-total-bruto" style="color: #d8b4fe;">R$ 0</div>
+            <div class="stat-desc">Valor Bruto (Soma Total)</div>
+        </div>
+
+        <div class="stat-card highlight">
+            <h3>Lucro Líquido (Facção)</h3>
+            <div class="stat-number" id="stat-faturamento">R$ 0</div>
+            <div class="stat-desc">Após tirar custos e % vendedor</div>
+        </div>
+
+        <div class="stat-card">
+            <h3>Itens Vendidos</h3>
+            <div class="stat-number" id="stat-total-itens">0</div>
+            <div class="stat-desc">Total de unidades</div>
+        </div>
+    </div>
+
+    <div class="card mt-20">
         <h3>🏆 Top Itens Vendidos</h3>
         <div id="stats-top-itens" class="top-list">
             <p class="text-muted italic">Carregando dados...</p>
