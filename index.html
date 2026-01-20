@@ -17,7 +17,7 @@
         <h1>Painel TRJ</h1>
         
         <div class="header-controls">
-            <div id="btn-admin-secret" class="system-status" onclick="app.toggleAdmin()" title="Clique para liberar acesso Admin">
+            <div id="btn-admin-secret" class="system-status" onclick="app.toggleAdmin()" title="Clique para liberar Estatísticas">
                 <span class="status-dot"></span> Sistema Online
             </div>
             <button class="btn-tutorial-start" onclick="app.startTutorial()">❓ Como usar?</button>
@@ -147,16 +147,19 @@
                 <div class="stat-number" id="stat-total-vendas">0</div>
                 <div class="stat-desc">Registros este mês</div>
             </div>
+
             <div class="stat-card">
                 <h3>Total Movimentado</h3>
                 <div class="stat-number" id="stat-total-bruto" style="color: #d8b4fe;">R$ 0</div>
-                <div class="stat-desc">Valor Bruto</div>
+                <div class="stat-desc">Valor Bruto (Soma Total)</div>
             </div>
+
             <div class="stat-card highlight">
                 <h3>Lucro Líquido (Facção)</h3>
                 <div class="stat-number" id="stat-faturamento">R$ 0</div>
-                <div class="stat-desc">Após custos e %</div>
+                <div class="stat-desc">Após tirar custos e % vendedor</div>
             </div>
+
             <div class="stat-card">
                 <h3>Itens Vendidos</h3>
                 <div class="stat-number" id="stat-total-itens">0</div>
@@ -182,10 +185,18 @@
                     <option value="" disabled selected>Selecione...</option>
                     <option>Barbearia</option>
                     <option>Loja de Armas</option>
+                    <option>Loja de Departamento</option>
                     <option>Banco Fleeca</option>
                     <option>Açougue</option>
                     <option>Banco Central</option>
+                    <option>Observatório</option>
+                    <option>Auditório</option>
                     <option>Mergulhador</option>
+                    <option>Atom</option>
+                    <option>Campo de Golf</option>
+                    <option>Loja Samir</option>
+                    <option>Planet</option>
+                    <option>Pacific Standard</option>
                     <option>Nióbio</option>
                     <option>Joalheria</option>
                     <option>Helicrash</option>
