@@ -187,7 +187,7 @@ const app = {
         if (price === 0) return this.showToast('Preço inválido', 'error');
         const item = CATALOG[id];
         this.state.cart.push({
-            id: id, name: item.name, price: price, qtd: qtd,
+            id: id, name: item.name, category: item.category, price: price, qtd: qtd,
             total: price * qtd, weight: item.weight, cost: item.cost, recipe: item.recipe
         });
         this.renderCart();
@@ -232,7 +232,10 @@ const app = {
 
     calculateCartProduction() {
         if (this.state.cart.length === 0) return this.showToast('Carrinho vazio!', 'error');
-        const totalMats = [0, 0, 0, 0];
+        
+        const totalMats = [0, 0, 0]; // Alum, Cobre, Mat
+        const projectTotals = {};
+        
         let totalMatWeight = 0, totalProdWeight = 0, detailsHTML = "";
         
         this.state.cart.forEach(item => {
@@ -240,18 +243,43 @@ const app = {
             if (item.recipe) {
                 const crafts = Math.ceil(item.qtd / 2);
                 let itemMatsHTML = "";
+                
+                // Processar materiais padrão e projeto
                 item.recipe.forEach((qtd, i) => {
                     const totalM = qtd * crafts;
-                    totalMats[i] += totalM;
-                    totalMatWeight += totalM * CONFIG.MAT_WEIGHTS[i];
-                    if (totalM > 0) itemMatsHTML += `<div class="mat-item-tiny"><span>${CONFIG.MAT_NAMES[i]}:</span> <b>${totalM}</b></div>`;
+                    if (totalM > 0) {
+                        totalMatWeight += totalM * CONFIG.MAT_WEIGHTS[i];
+                        
+                        // Determinar nome do material ou projeto específico
+                        let matName = CONFIG.MAT_NAMES[i];
+                        if(i === 3) {
+                            // Lógica para nomear o projeto baseado na categoria
+                            if(item.category.includes("Pistola")) matName = "Projeto de Pistola";
+                            else if(item.category.includes("Sub")) matName = "Projeto de Sub";
+                            else if(item.category.includes("Fuzil")) matName = "Projeto de Fuzil";
+                            else if(item.category.includes("Escopeta")) matName = "Projeto de Escopeta";
+                            
+                            if(!projectTotals[matName]) projectTotals[matName] = 0;
+                            projectTotals[matName] += totalM;
+                        } else {
+                            totalMats[i] += totalM;
+                        }
+                        
+                        itemMatsHTML += `<div class="mat-item-tiny"><span>${matName}:</span> <b>${totalM}</b></div>`;
+                    }
                 });
+                
                 detailsHTML += `<div class="detail-card-small"><div class="detail-header-small"><span class="detail-name">${item.name}</span><span class="badge-count-small">x${item.qtd}</span></div><div class="mats-grid-small">${itemMatsHTML}</div></div>`;
             }
         });
 
-        let matsHtml = totalMats.map((t, i) => i !== 3 && t > 0 ? `<div class="mat-tag-pill"><span>${CONFIG.MAT_NAMES[i]}:</span> <b>${t}</b></div>` : '').join('');
-        if(totalMats[3] > 0) matsHtml += `<div class="mat-tag-pill project-tag"><span>Projeto:</span> <b>${totalMats[3]}</b></div>`;
+        // Gerar HTML dos materiais padrão
+        let matsHtml = totalMats.map((t, i) => t > 0 ? `<div class="mat-tag-pill"><span>${CONFIG.MAT_NAMES[i]}:</span> <b>${t}</b></div>` : '').join('');
+        
+        // Adicionar HTML dos projetos separados
+        for (const [pName, pQtd] of Object.entries(projectTotals)) {
+            matsHtml += `<div class="mat-tag-pill project-tag"><span>${pName}:</span> <b>${pQtd}</b></div>`;
+        }
 
         this.dom['mats-list-display'].innerHTML = matsHtml;
         this.dom['sales-production-details'].innerHTML = detailsHTML;
@@ -408,7 +436,6 @@ const app = {
     endTutorial() { this.state.tutorialActive = false; this.dom['tutorial-box'].classList.add('hidden'); this.cleanHighlights(); },
     cleanHighlights() { document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight')); document.querySelectorAll('.tutorial-active-parent').forEach(el => el.classList.remove('tutorial-active-parent')); },
     
-    // --- TUTORIAL COMPLETO RESTAURADO ---
     getTutorialSteps() {
         return [
             {
@@ -443,13 +470,13 @@ const app = {
             },
             {
                 tab: 'acoes',
-                elementId: 'acoes', // Aponta para a aba inteira
+                elementId: 'acoes',
                 title: "6. Registro de Ações",
                 text: "Registre vitórias ou derrotas em PvP e ações da facção."
             },
             {
-                tab: 'vendas', // Volta para a aba principal
-                elementId: 'btn-admin-secret', // Aponta para o botão secreto
+                tab: 'vendas',
+                elementId: 'btn-admin-secret',
                 title: "7. Modo Admin",
                 text: "Clique em <b>Sistema Online</b> para revelar a aba secreta de <b>Estatísticas</b>."
             }
@@ -462,7 +489,6 @@ const app = {
         const s = this.getTutorialSteps(); 
         const step = s[this.state.tutorialStepIndex]; 
         
-        // Troca de aba se necessário
         this.switchTab(step.tab); 
         
         this.dom['tut-title'].innerText = step.title; 
