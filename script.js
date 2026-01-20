@@ -54,7 +54,6 @@ const app = {
         this.cacheDOM();
         this.setDefaults();
         this.renderCatalog();
-        // Não carrega dashboard de inicio
     },
 
     cacheDOM() {
@@ -83,7 +82,6 @@ const app = {
         });
     },
 
-    // --- MODO ADMIN ---
     toggleAdmin() {
         if (this.state.isAdmin) return;
         this.state.isAdmin = true;
@@ -94,8 +92,8 @@ const app = {
         btn.className = 'nav-btn';
         btn.innerText = '📊 Estatísticas';
         btn.onclick = (e) => app.switchTab('estatisticas', e);
-        // Insere antes da Divulgação (penúltimo) ou no final
-        nav.insertBefore(btn, nav.children[2]); // Insere na posição 3 (após Ações)
+        // Insere antes da Divulgação
+        nav.insertBefore(btn, nav.children[nav.children.length - 1]);
         this.loadDashboard();
     },
 
@@ -296,7 +294,7 @@ const app = {
     },
     handleEnterParticipant(e) { if(e.key === 'Enter') this.addParticipant(); },
 
-    // --- ENVIOS WEBHOOKS (MANTIDOS E COMPLETOS) ---
+    // --- ENVIOS ---
     async sendWebhook(url, payload, msg, cb) {
         try {
             await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
@@ -383,10 +381,12 @@ const app = {
                 dataString: dateStr
             });
             this.showToast("Venda salva!");
+            this.clearCart();
+            // Atualiza dashboard se estiver no modo admin
             if(this.state.isAdmin) this.loadDashboard();
         } catch(e) { console.error(e); this.showToast("Erro ao salvar", "error"); }
 
-        // Webhook Principal (Completa)
+        // Webhook Principal
         const embedMain = {
             username: "TrojanHelper",
             embeds: [{
@@ -405,7 +405,7 @@ const app = {
             }]
         };
 
-        // Webhook de Log (Resumo)
+        // Webhook Log
         const embedLog = {
             username: "Trojan Log",
             embeds: [{
@@ -473,7 +473,7 @@ const app = {
     endTutorial() { this.state.tutorialActive = false; this.dom['tutorial-box'].classList.add('hidden'); this.cleanHighlights(); },
     cleanHighlights() { document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight')); document.querySelectorAll('.tutorial-active-parent').forEach(el => el.classList.remove('tutorial-active-parent')); },
     
-    // --- TUTORIAL COMPLETO RESTAURADO ---
+    // --- TUTORIAL COMPLETO ---
     getTutorialSteps() {
         return [
             { tab: 'vendas', elementId: 'area-vendedor-info', title: "1. Identificação", text: "Preencha vendedor e facção." },
