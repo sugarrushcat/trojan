@@ -52,7 +52,7 @@ const app = {
 
     init() {
         this.cacheDOM();
-        this.setDefaults();
+        this.setDefaults(); // Aqui ele chama a função corrigida
         this.renderCatalog();
     },
 
@@ -69,11 +69,28 @@ const app = {
         ids.forEach(id => this.dom[id] = document.getElementById(id));
     },
 
+    // --- CORREÇÃO DO HORÁRIO ---
     setDefaults() {
+        // Pega a hora atual do sistema
         const now = new Date();
-        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-        const dateISO = now.toISOString().split('T')[0];
-        const timeStr = now.toTimeString().slice(0, 5);
+        
+        // Calcula o timestamp UTC exato
+        const utcTimestamp = now.getTime() + (now.getTimezoneOffset() * 60000);
+        
+        // Aplica o offset de Brasília (-3 horas) manualmente
+        // 3600000 milissegundos = 1 hora
+        const brasiliaTimestamp = utcTimestamp - (3 * 3600000);
+        
+        // Cria um novo objeto Date com o tempo ajustado
+        const brasiliaDate = new Date(brasiliaTimestamp);
+        
+        // Transforma em string ISO (YYYY-MM-DDTHH:MM:SS...)
+        // Como ajustamos o timestamp manualmente, o toISOString (que usa UTC) vai mostrar o horário de Brasília
+        const isoString = brasiliaDate.toISOString();
+        
+        const dateISO = isoString.split('T')[0]; // Pega YYYY-MM-DD
+        const timeStr = isoString.split('T')[1].slice(0, 5); // Pega HH:MM
+        
         ['acao', 'venda'].forEach(prefix => {
             const d = document.getElementById(`${prefix}-data`);
             const t = document.getElementById(`${prefix}-hora`);
@@ -92,8 +109,7 @@ const app = {
         btn.className = 'nav-btn';
         btn.innerText = '📊 Estatísticas';
         btn.onclick = (e) => app.switchTab('estatisticas', e);
-        // Insere antes da Divulgação
-        nav.insertBefore(btn, nav.children[nav.children.length - 1]);
+        nav.insertBefore(btn, nav.lastElementChild); // Insere antes da divulgação
         this.loadDashboard();
     },
 
@@ -422,7 +438,6 @@ const app = {
         this.sendWebhook(CONFIG.WEBHOOKS.LOGS, embedLog);
     },
 
-    // --- DASHBOARD (ADMIN) ---
     async loadDashboard() {
         if (!this.dom['stat-total-vendas']) return;
         this.dom['stats-top-itens'].innerHTML = '<p class="text-muted italic">Carregando...</p>';
