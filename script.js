@@ -70,27 +70,21 @@ const app = {
     },
 
     // --- CORREÇÃO DO HORÁRIO ---
-    setDefaults() {
-        // Pega a hora atual do sistema
+setDefaults() {
         const now = new Date();
         
-        // Calcula o timestamp UTC exato
-        const utcTimestamp = now.getTime() + (now.getTimezoneOffset() * 60000);
-        
-        // Aplica o offset de Brasília (-3 horas) manualmente
-        // 3600000 milissegundos = 1 hora
-        const brasiliaTimestamp = utcTimestamp - (3 * 3600000);
-        
-        // Cria um novo objeto Date com o tempo ajustado
-        const brasiliaDate = new Date(brasiliaTimestamp);
-        
-        // Transforma em string ISO (YYYY-MM-DDTHH:MM:SS...)
-        // Como ajustamos o timestamp manualmente, o toISOString (que usa UTC) vai mostrar o horário de Brasília
-        const isoString = brasiliaDate.toISOString();
-        
-        const dateISO = isoString.split('T')[0]; // Pega YYYY-MM-DD
-        const timeStr = isoString.split('T')[1].slice(0, 5); // Pega HH:MM
-        
+        // Força a data e hora para o fuso de São Paulo (Brasília)
+        const optionsDate = { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' };
+        const optionsTime = { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit', hour12: false };
+
+        // Formata e converte para o padrão do input (AAAA-MM-DD)
+        const dateStrBR = new Intl.DateTimeFormat('pt-BR', optionsDate).format(now);
+        const [dia, mes, ano] = dateStrBR.split('/');
+        const dateISO = `${ano}-${mes}-${dia}`;
+
+        // Pega apenas a hora e minuto
+        const timeStr = new Intl.DateTimeFormat('pt-BR', optionsTime).format(now);
+
         ['acao', 'venda'].forEach(prefix => {
             const d = document.getElementById(`${prefix}-data`);
             const t = document.getElementById(`${prefix}-hora`);
