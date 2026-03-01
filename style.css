@@ -28,7 +28,7 @@ body {
     min-height: 100vh; 
     padding: 20px; 
     overflow-x: hidden;
-    user-select: none; /* Previne que o jogador selecione tudo clicando rápido no FiveM */
+    user-select: none; /* Melhora experiência no FiveM */
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -41,7 +41,7 @@ h1 { color: var(--primary); text-transform: uppercase; letter-spacing: 3px; font
 /* Botão secreto de Admin */
 .system-status { 
     font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 8px; font-family: monospace; background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); 
-    cursor: pointer; /* Indica que é clicável */
+    cursor: pointer;
     transition: 0.2s;
 }
 .system-status:hover { background: rgba(255,255,255,0.1); color: #fff; }
@@ -212,8 +212,18 @@ input[type="radio"]:checked + .label-loss { border-color: var(--danger); color: 
 .btn-qty-sm:hover { background: var(--primary); color: white; }
 .qty-display-sm { font-size: 0.9rem; font-weight: bold; min-width: 24px; text-align: center; color: white; }
 
-/* Para o mascote não bloquear o clique nos tablets */
-.site-mascot { position: fixed; bottom: 20px; left: 20px; width: 120px; height: auto; z-index: 90; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); transition: transform 0.3s ease; pointer-events: none; opacity: 0.9; }
+.site-mascot { position: fixed; bottom: 20px; left: 20px; width: 120px; height: auto; z-index: 90; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); transition: transform 0.3s ease; cursor: grab; }
+.site-mascot:hover { transform: translateY(-5px) scale(1.1); }
+
+/* --- RESPONSIVIDADE E OTIMIZAÇÃO PARA FIVEM --- */
+@media (max-width: 768px) { 
+    .site-mascot { display: none; /* Esconde o mascote no celular para não atrapalhar */ }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-main); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; box-shadow: 0 0 10px var(--primary); }
 
 /* --- TUTORIAL --- */
 .btn-tutorial-start { background: rgba(139, 92, 246, 0.2); border: 1px solid var(--primary); color: #fff; padding: 5px 15px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
@@ -249,16 +259,3 @@ input[type="radio"]:checked + .label-loss { border-color: var(--danger); color: 
 .top-list { display: flex; flex-direction: column; gap: 8px; }
 .top-item { display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary); }
 .top-item-qtd { font-weight: bold; color: white; }
-
-/* Scrollbar Personalizada Roxa Neon */
-::-webkit-scrollbar {
-    width: 6px;
-}
-::-webkit-scrollbar-track {
-    background: var(--bg-main);
-}
-::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 10px;
-    box-shadow: 0 0 10px var(--primary);
-}
