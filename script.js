@@ -29,7 +29,7 @@ const CONFIG = {
     WEBHOOKS: {
         ACOES: "https://discord.com/api/webhooks/1438189798849384560/lote5LpQxF80SDUZ3QdPOj2aHiQ7JtcJWKfTNxErKA0MjhDdQ86vruN74dnNUy0YMowD",
         VENDAS: "https://discord.com/api/webhooks/1434731757953093662/gElahX6G0yY6h-DVQx1RQ8wOu6IJGi-k2M20fEVOgNBy-WT3ztobwuPspLB6hLaeAy6z",
-        LOGS: "https://discord.com/api/webhooks/1450610317813092427/n9N_MYFuMGdMtT2By1FbjKQ4OEy33le1711v55vpCdyGyFhZiLedJsRH9ImHANX0sQZY"
+        LOGS: "NAO TEM AINDA"
     },
     MAT_NAMES: ["Alumínio", "Cobre", "Materiais", "Projeto"],
     MAT_WEIGHTS: [0.01, 0.01, 0.01, 0.01]
