@@ -94,13 +94,27 @@ const app = {
 
     setDefaults() {
         const now = new Date();
-        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-        const dateISO = now.toISOString().split('T')[0];
-        const timeStr = now.toTimeString().slice(0, 5);
+        
+        // Força a data para o fuso de Brasília (formato YYYY-MM-DD exigido pelo input date)
+        const dateStr = new Intl.DateTimeFormat('en-CA', { 
+            timeZone: 'America/Sao_Paulo', 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit' 
+        }).format(now);
+        
+        // Força a hora para o fuso de Brasília (formato HH:MM)
+        const timeStr = new Intl.DateTimeFormat('pt-BR', { 
+            timeZone: 'America/Sao_Paulo', 
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: false
+        }).format(now);
+
         ['acao', 'venda'].forEach(prefix => {
             const d = document.getElementById(`${prefix}-data`);
             const t = document.getElementById(`${prefix}-hora`);
-            if (d) d.value = dateISO;
+            if (d) d.value = dateStr;
             if (t) t.value = timeStr;
         });
     },
@@ -390,6 +404,7 @@ const app = {
         try {
             await fetch(url, {
                 method: "POST",
+                mode: "no-cors", /* CRUCIAL para evitar bloqueios de CORS dentro do FiveM */
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             });
@@ -397,7 +412,7 @@ const app = {
             if (cb) cb();
         } catch (e) {
             console.error(e);
-            this.showToast("Erro no Discord", "error");
+            this.showToast("Erro de conexão", "error");
         }
     },
 
