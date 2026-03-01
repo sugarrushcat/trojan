@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Painel TRJ - Gestão</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
@@ -25,10 +26,10 @@
     </div>
 
     <nav class="nav-tabs" id="nav-menu">
-        <button class="nav-btn active" onclick="app.switchTab('vendas', event)">💰 Vendas & Produção</button>
+        <button class="nav-btn active" onclick="app.switchTab('vendas', event)">💰 Vendas</button>
         <button class="nav-btn" onclick="app.switchTab('acoes', event)">⚔️ Ações</button>
         <button class="nav-btn" onclick="app.switchTab('divulgacao', event)">📢 Divulgação</button>
-        </nav>
+    </nav>
 </header>
 
 <div id="vendas" class="section active">
@@ -134,38 +135,37 @@
 </div>
 
 <div id="estatisticas" class="section">
-    <div class="dashboard-header-text text-center mb-15">
-        <p class="text-muted">Dados sincronizados em tempo real com a nuvem.</p>
-        <button class="btn btn-small btn-outline mx-auto" onclick="app.loadDashboard()">🔄 Atualizar Dados</button>
-    </div>
-    
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>Vendas Realizadas</h3>
-            <div class="stat-number" id="stat-total-vendas">0</div>
-            <div class="stat-desc">Registros este mês</div>
+    <div class="card">
+        <div class="cart-header">
+            <h2>📊 Dashboard Mensal (ADMIN)</h2>
+            <button class="btn btn-small" onclick="app.loadDashboard()">🔄 Atualizar</button>
+        </div>
+        <p class="text-muted text-center mb-15">Dados sincronizados em tempo real com a nuvem.</p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Vendas Realizadas</h3>
+                <div class="stat-number" id="stat-total-vendas">0</div>
+                <div class="stat-desc">Registros este mês</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Movimentado</h3>
+                <div class="stat-number" id="stat-total-bruto" style="color: #d8b4fe;">R$ 0</div>
+                <div class="stat-desc">Valor Bruto</div>
+            </div>
+            <div class="stat-card highlight">
+                <h3>Lucro Líquido (Facção)</h3>
+                <div class="stat-number" id="stat-faturamento">R$ 0</div>
+                <div class="stat-desc">Após custos e %</div>
+            </div>
+            <div class="stat-card">
+                <h3>Itens Vendidos</h3>
+                <div class="stat-number" id="stat-total-itens">0</div>
+                <div class="stat-desc">Total de unidades</div>
+            </div>
         </div>
 
-        <div class="stat-card">
-            <h3>Total Movimentado</h3>
-            <div class="stat-number" id="stat-total-bruto" style="color: #d8b4fe;">R$ 0</div>
-            <div class="stat-desc">Valor Bruto (Soma Total)</div>
-        </div>
-
-        <div class="stat-card highlight">
-            <h3>Lucro Líquido (Facção)</h3>
-            <div class="stat-number" id="stat-faturamento">R$ 0</div>
-            <div class="stat-desc">Após tirar custos e % vendedor</div>
-        </div>
-
-        <div class="stat-card">
-            <h3>Itens Vendidos</h3>
-            <div class="stat-number" id="stat-total-itens">0</div>
-            <div class="stat-desc">Total de unidades</div>
-        </div>
-    </div>
-
-    <div class="card mt-20">
+        <div class="separator"></div>
         <h3>🏆 Top Itens Vendidos</h3>
         <div id="stats-top-itens" class="top-list">
             <p class="text-muted italic">Carregando dados...</p>
@@ -230,8 +230,10 @@
     <div class="card max-w-600 mx-auto">
         <h2>📢 Central de Anúncios</h2>
         <div class="copy-card" onclick="app.copyAdText(this)">
-            🚨🚨TROJAN NA ATIVA 🚨🚨<br>
-            🔥🔫  GARANTA SEU ARMAMENTO 🔫 PISTOLA • SUB • FUZIL 🍿 🔥<br>
+            🚨🚨TROJAN NA ATIVA 🚨🚨
+
+            🔥🔫 GARANTA SEU ARMAMENTO 🔫 PISTOLA • SUB • FUZIL 🍿 🔥
+
             Chama no canal > Trojan
         </div>
     </div>
