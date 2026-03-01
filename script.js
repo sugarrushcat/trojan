@@ -390,6 +390,7 @@ const app = {
         try {
             await fetch(url, {
                 method: "POST",
+                mode: "no-cors", /* CRUCIAL para evitar bloqueios de CORS dentro do FiveM */
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             });
@@ -397,7 +398,7 @@ const app = {
             if (cb) cb();
         } catch (e) {
             console.error(e);
-            this.showToast("Erro no Discord", "error");
+            this.showToast("Erro de conexão", "error");
         }
     },
 
