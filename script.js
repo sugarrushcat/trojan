@@ -1,21 +1,30 @@
-// --- CONFIGURAÇÃO DO FIREBASE ---
+/**
+ * =============================================================================
+ * CONFIGURAÇÃO E INICIALIZAÇÃO DO FIREBASE
+ * =============================================================================
+ */
 const firebaseConfig = {
-  apiKey: "AIzaSyBmfbbuI02_UFirRXRGSmo0fU9ZekQ2Egw",
-  authDomain: "trojan-stats.firebaseapp.com",
-  projectId: "trojan-stats",
-  storageBucket: "trojan-stats.firebasestorage.app",
-  messagingSenderId: "826944316857",
-  appId: "1:826944316857:web:143f3519b5b70134fb4268"
+    apiKey: "AIzaSyBmfbbuI02_UFirRXRGSmo0fU9ZekQ2Egw",
+    authDomain: "trojan-stats.firebaseapp.com",
+    projectId: "trojan-stats",
+    storageBucket: "trojan-stats.firebasestorage.app",
+    messagingSenderId: "826944316857",
+    appId: "1:826944316857:web:143f3519b5b70134fb4268"
 };
 
 try {
     firebase.initializeApp(firebaseConfig);
     var db = firebase.firestore();
-    console.log("Firebase conectado.");
+    console.log("✅ Firebase conectado com sucesso.");
 } catch (error) {
-    console.error("Erro Firebase:", error);
+    console.error("❌ Erro ao conectar no Firebase:", error);
 }
 
+/**
+ * =============================================================================
+ * CONSTANTES GLOBAIS E DADOS
+ * =============================================================================
+ */
 const CONFIG = {
     WEBHOOKS: {
         ACOES: "https://discord.com/api/webhooks/1438189798849384560/lote5LpQxF80SDUZ3QdPOj2aHiQ7JtcJWKfTNxErKA0MjhDdQ86vruN74dnNUy0YMowD",
@@ -27,18 +36,24 @@ const CONFIG = {
 };
 
 const CATALOG = {
-    'fn_five_seven': { name: "Fn Five Seven (PT)", category: "Pistolas", price: { min: 53000, max: 63600 }, weight: 1.5, cost: 10000, recipe: [17, 13, 26, 25] },
-    'hk_p7m10': { name: "HK P7M10 (Fajuta)", category: "Pistolas", price: { min: 25000, max: 30000 }, weight: 1.0, cost: 5000, recipe: [17, 13, 26, 25] },
-    'tec_9': { name: "Tec-9 (Sub)", category: "Submetralhadoras", price: { min: 90000, max: 110000 }, weight: 1.75, cost: 20000, recipe: [34, 26, 33, 25] },
-    'uzi': { name: "Uzi (Sub)", category: "Submetralhadoras", price: { min: 120000, max: 140000 }, weight: 1.25, cost: 20000, recipe: [48, 39, 38, 35] },
-    'mtar_21': { name: "Mtar-21 (Sub)", category: "Submetralhadoras", price: { min: 150000, max: 170000 }, weight: 5.0, cost: 25000, recipe: [51, 39, 38, 35] },
-    'ak_74': { name: "Ak-74 (Fuzil)", category: "Fuzis", price: { min: 240000, max: 260000 }, weight: 8.0, cost: 35000, recipe: [85, 65, 40, 40] },
-    'g36c': { name: "G36C (Fuzil)", category: "Fuzis", price: { min: 260000, max: 280000 }, weight: 8.0, cost: 30000, recipe: [85, 65, 40, 40] },
-    'ak_compact': { name: "Ak Compact (Fuzil)", category: "Fuzis", price: { min: 190000, max: 210000 }, weight: 2.25, cost: 40000, recipe: [85, 70, 50, 40] },
-    'mossberg': { name: "Mossberg 590", category: "Escopetas", price: { min: 260000, max: 280000 }, weight: 6.0, cost: 35000, recipe: [90, 75, 50, 40] }
+    'fn_five_seven': { name: "Fn Five Seven (PT)", category: "Pistolas",       price: { min: 53000, max: 63600 },   weight: 1.5,  cost: 10000, recipe: [17, 13, 26, 25] },
+    'hk_p7m10':      { name: "HK P7M10 (Fajuta)",  category: "Pistolas",       price: { min: 25000, max: 30000 },   weight: 1.0,  cost: 5000,  recipe: [17, 13, 26, 25] },
+    'tec_9':         { name: "Tec-9 (Sub)",        category: "Submetralhadoras", price: { min: 90000, max: 110000 },  weight: 1.75, cost: 20000, recipe: [34, 26, 33, 25] },
+    'uzi':           { name: "Uzi (Sub)",          category: "Submetralhadoras", price: { min: 120000, max: 140000 }, weight: 1.25, cost: 20000, recipe: [48, 39, 38, 35] },
+    'mtar_21':       { name: "Mtar-21 (Sub)",      category: "Submetralhadoras", price: { min: 150000, max: 170000 }, weight: 5.0,  cost: 25000, recipe: [51, 39, 38, 35] },
+    'ak_74':         { name: "Ak-74 (Fuzil)",      category: "Fuzis",          price: { min: 240000, max: 260000 }, weight: 8.0,  cost: 35000, recipe: [85, 65, 40, 40] },
+    'g36c':          { name: "G36C (Fuzil)",       category: "Fuzis",          price: { min: 260000, max: 280000 }, weight: 8.0,  cost: 30000, recipe: [85, 65, 40, 40] },
+    'ak_compact':    { name: "Ak Compact (Fuzil)", category: "Fuzis",          price: { min: 190000, max: 210000 }, weight: 2.25, cost: 40000, recipe: [85, 70, 50, 40] },
+    'mossberg':      { name: "Mossberg 590",       category: "Escopetas",      price: { min: 260000, max: 280000 }, weight: 6.0,  cost: 35000, recipe: [90, 75, 50, 40] }
 };
 
+/**
+ * =============================================================================
+ * APLICAÇÃO PRINCIPAL
+ * =============================================================================
+ */
 const app = {
+    // --- ESTADO DA APLICAÇÃO ---
     state: {
         participants: new Set(),
         cart: [],
@@ -50,41 +65,38 @@ const app = {
     },
     dom: {},
 
+    // --- CICLO DE VIDA ---
     init() {
         this.cacheDOM();
-        this.setDefaults(); // Aqui ele chama a função corrigida
+        this.setDefaults();
         this.renderCatalog();
     },
 
     cacheDOM() {
         const ids = [
+            // Ações
             'acao-tipo', 'acao-data', 'acao-hora', 'novo-participante', 'lista-participantes',
+            // Vendas
             'venda-vendedor', 'venda-faccao', 'venda-data', 'venda-hora', 'venda-preco', 'venda-qtd',
             'sales-catalog', 'price-controls', 'select-msg', 'cart-items', 'cart-summary-area',
+            // Produção
             'cart-production-area', 'mats-list-display', 'sales-production-details',
-            'total-mat-weight-display', 'total-prod-weight-display', 'toast-container',
+            'total-mat-weight-display', 'total-prod-weight-display',
+            // UI Geral
+            'toast-container',
+            // Tutorial
             'tutorial-box', 'tut-title', 'tut-text', 'tut-progress', 'btn-tut-prev',
+            // Estatísticas
             'stat-total-vendas', 'stat-faturamento', 'stat-total-itens', 'stats-top-itens', 'stat-total-bruto'
         ];
         ids.forEach(id => this.dom[id] = document.getElementById(id));
     },
 
-    // --- CORREÇÃO DO HORÁRIO ---
-setDefaults() {
+    setDefaults() {
         const now = new Date();
-        
-        // Força a data e hora para o fuso de São Paulo (Brasília)
-        const optionsDate = { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' };
-        const optionsTime = { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit', hour12: false };
-
-        // Formata e converte para o padrão do input (AAAA-MM-DD)
-        const dateStrBR = new Intl.DateTimeFormat('pt-BR', optionsDate).format(now);
-        const [dia, mes, ano] = dateStrBR.split('/');
-        const dateISO = `${ano}-${mes}-${dia}`;
-
-        // Pega apenas a hora e minuto
-        const timeStr = new Intl.DateTimeFormat('pt-BR', optionsTime).format(now);
-
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        const dateISO = now.toISOString().split('T')[0];
+        const timeStr = now.toTimeString().slice(0, 5);
         ['acao', 'venda'].forEach(prefix => {
             const d = document.getElementById(`${prefix}-data`);
             const t = document.getElementById(`${prefix}-hora`);
@@ -93,23 +105,52 @@ setDefaults() {
         });
     },
 
+    // --- NAVEGAÇÃO E UI ---
+    switchTab(tabId, event) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        if (event) event.currentTarget.classList.add('active');
+        if (tabId === 'estatisticas' && this.state.isAdmin) this.loadDashboard();
+    },
+
     toggleAdmin() {
         if (this.state.isAdmin) return;
         this.state.isAdmin = true;
         this.showToast("🔓 Modo Admin Ativado!");
-        
+
         const nav = document.getElementById('nav-menu');
         const btn = document.createElement('button');
         btn.className = 'nav-btn';
         btn.innerText = '📊 Estatísticas';
         btn.onclick = (e) => app.switchTab('estatisticas', e);
-        nav.insertBefore(btn, nav.lastElementChild); // Insere antes da divulgação
+        nav.insertBefore(btn, nav.lastElementChild);
         this.loadDashboard();
     },
 
+    copyAdText(el) {
+        navigator.clipboard.writeText(el.innerText).then(() => this.showToast("Copiado!"));
+    },
+
+    showToast(msg, type = 'success') {
+        const t = document.createElement('div');
+        t.className = `toast ${type}`;
+        t.innerText = msg;
+        this.dom['toast-container'].appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    },
+
+    formatDate(d) {
+        if (!d) return '';
+        const [y, m, d2] = d.split('-');
+        return `${d2}/${m}/${y}`;
+    },
+
+    // --- CATÁLOGO E SELEÇÃO ---
     renderCatalog() {
         const grouped = {};
         const categories = ["Pistolas", "Submetralhadoras", "Fuzis", "Escopetas", "Outros"];
+        
         Object.entries(CATALOG).forEach(([id, item]) => {
             const cat = item.category || "Outros";
             if (!grouped[cat]) grouped[cat] = [];
@@ -121,13 +162,22 @@ setDefaults() {
             if (grouped[cat]) {
                 htmlBuffer += `<div class="catalog-category-title collapsed" onclick="app.toggleCategory(this)">${cat}</div><div class="grid-list-small hidden">`;
                 grouped[cat].forEach(item => {
-                    htmlBuffer += `<div class="catalog-item" data-id="${item.id}" onclick="app.selectItem('${item.id}')"><div class="cat-name">${item.name}</div><div class="cat-prices"><span class="price-tag min">R$ ${item.price.min/1000}k</span><span class="price-separator">|</span><span class="price-tag max">R$ ${item.price.max/1000}k</span></div></div>`;
+                    htmlBuffer += `
+                    <div class="catalog-item" data-id="${item.id}" onclick="app.selectItem('${item.id}')">
+                        <div class="cat-name">${item.name}</div>
+                        <div class="cat-prices">
+                            <span class="price-tag min">R$ ${item.price.min / 1000}k</span>
+                            <span class="price-separator">|</span>
+                            <span class="price-tag max">R$ ${item.price.max / 1000}k</span>
+                        </div>
+                    </div>`;
                 });
                 htmlBuffer += `</div>`;
             }
         });
+        
         const el = this.dom['sales-catalog'];
-        if(el) el.innerHTML = htmlBuffer;
+        if (el) el.innerHTML = htmlBuffer;
     },
 
     toggleCategory(el) {
@@ -136,12 +186,26 @@ setDefaults() {
         if (content) content.classList.toggle('hidden');
     },
 
+    selectItem(id) {
+        this.state.selectedItemId = id;
+        document.querySelectorAll('.catalog-item').forEach(el => el.classList.remove('selected'));
+        const el = document.querySelector(`.catalog-item[data-id="${id}"]`);
+        if (el) el.classList.add('selected');
+        
+        this.dom['price-controls'].classList.remove('hidden-controls');
+        this.dom['select-msg'].style.display = 'none';
+        this.dom['venda-preco'].value = CATALOG[id].price[this.state.globalPriceType];
+        this.dom['venda-qtd'].value = 1;
+    },
+
     updateGlobalPriceType(type) {
         this.state.globalPriceType = type;
         const typeName = type === 'min' ? 'Parceria' : 'Pista';
+        
         if (this.state.selectedItemId) {
             this.dom['venda-preco'].value = CATALOG[this.state.selectedItemId].price[type];
         }
+        
         if (this.state.cart.length > 0) {
             this.state.cart.forEach(item => {
                 item.price = CATALOG[item.id].price[type];
@@ -155,6 +219,7 @@ setDefaults() {
         }
     },
 
+    // --- CONTROLES DE INPUT ---
     validateInput(el) {
         let val = parseInt(el.value);
         if (isNaN(val) || val < 1) el.value = 1;
@@ -168,6 +233,33 @@ setDefaults() {
         el.value = val;
     },
 
+    // --- GERENCIAMENTO DO CARRINHO ---
+    addToCart() {
+        const id = this.state.selectedItemId;
+        if (!id) return this.showToast('Selecione uma arma', 'error');
+        
+        const price = parseFloat(this.dom['venda-preco'].value) || 0;
+        const qtd = parseInt(this.dom['venda-qtd'].value) || 1;
+        
+        if (price === 0) return this.showToast('Preço inválido', 'error');
+        
+        const item = CATALOG[id];
+        this.state.cart.push({
+            id: id,
+            name: item.name,
+            price: price,
+            qtd: qtd,
+            total: price * qtd,
+            weight: item.weight,
+            cost: item.cost,
+            recipe: item.recipe
+        });
+        
+        this.renderCart();
+        this.showToast('Item adicionado!');
+        this.dom['cart-production-area'].classList.add('hidden');
+    },
+
     adjustCartQtd(idx, n) {
         const item = this.state.cart[idx];
         if (item.qtd + n < 1) return;
@@ -177,54 +269,6 @@ setDefaults() {
         if (!this.dom['cart-production-area'].classList.contains('hidden')) {
             this.calculateCartProduction();
         }
-    },
-
-    selectItem(id) {
-        this.state.selectedItemId = id;
-        document.querySelectorAll('.catalog-item').forEach(el => el.classList.remove('selected'));
-        const el = document.querySelector(`.catalog-item[data-id="${id}"]`);
-        if(el) el.classList.add('selected');
-        this.dom['price-controls'].classList.remove('hidden-controls');
-        this.dom['select-msg'].style.display = 'none';
-        this.dom['venda-preco'].value = CATALOG[id].price[this.state.globalPriceType];
-        this.dom['venda-qtd'].value = 1;
-    },
-
-    addToCart() {
-        const id = this.state.selectedItemId;
-        if (!id) return this.showToast('Selecione uma arma', 'error');
-        const price = parseFloat(this.dom['venda-preco'].value) || 0;
-        const qtd = parseInt(this.dom['venda-qtd'].value) || 1;
-        if (price === 0) return this.showToast('Preço inválido', 'error');
-        const item = CATALOG[id];
-        this.state.cart.push({
-            id: id, name: item.name, price: price, qtd: qtd,
-            total: price * qtd, weight: item.weight, cost: item.cost, recipe: item.recipe
-        });
-        this.renderCart();
-        this.showToast('Item adicionado!');
-        this.dom['cart-production-area'].classList.add('hidden');
-    },
-
-    renderCart() {
-        const container = this.dom['cart-items'];
-        if (this.state.cart.length === 0) {
-            container.innerHTML = '<p class="empty-msg">Carrinho vazio</p>';
-            this.dom['cart-summary-area'].innerHTML = '';
-            return;
-        }
-        let html = '', grandTotal = 0, totalProdCost = 0;
-        this.state.cart.forEach((item, idx) => {
-            grandTotal += item.total;
-            totalProdCost += (item.cost * item.qtd);
-            html += `<div class="cart-item"><div class="cart-item-title">${item.name} <span class="badge-count-small">x${item.qtd}</span></div>
-            <div class="cart-controls-row"><div class="qty-selector-sm"><button class="btn-qty-sm" onclick="app.adjustCartQtd(${idx}, -1)">-</button><span class="qty-display-sm">${item.qtd}</span><button class="btn-qty-sm" onclick="app.adjustCartQtd(${idx}, 1)">+</button></div><div class="cart-item-price">R$ ${item.total.toLocaleString('pt-BR')}</div></div><div class="btn-remove-item" onclick="app.removeFromCart(${idx})">&times;</div></div>`;
-        });
-        container.innerHTML = html;
-        const faccaoNet = (grandTotal * 0.70) - totalProdCost;
-        this.dom['cart-summary-area'].innerHTML = `<div class="cart-summary-box"><div class="summary-total">💸 Total: R$ ${grandTotal.toLocaleString('pt-BR')}</div>
-        ${totalProdCost > 0 ? `<div class="text-sub">🔨 Custo Prod.: R$ ${totalProdCost.toLocaleString('pt-BR')}</div>` : ''}
-        <div class="summary-seller">💰 Vendedor (30%): R$ ${(grandTotal * 0.30).toLocaleString('pt-BR')}</div><div class="summary-faction">🔥 Facção: R$ ${faccaoNet.toLocaleString('pt-BR')}</div></div>`;
     },
 
     removeFromCart(idx) {
@@ -239,16 +283,50 @@ setDefaults() {
         this.dom['cart-production-area'].classList.add('hidden');
     },
 
-    closeProduction() {
-        this.dom['cart-production-area'].classList.add('hidden');
+    renderCart() {
+        const container = this.dom['cart-items'];
+        if (this.state.cart.length === 0) {
+            container.innerHTML = '<p class="empty-msg">Carrinho vazio</p>';
+            this.dom['cart-summary-area'].innerHTML = '';
+            return;
+        }
+
+        let html = '', grandTotal = 0, totalProdCost = 0;
+        this.state.cart.forEach((item, idx) => {
+            grandTotal += item.total;
+            totalProdCost += (item.cost * item.qtd);
+            html += `
+            <div class="cart-item">
+                <div class="cart-item-title">${item.name} <span class="badge-count-small">x${item.qtd}</span></div>
+                <div class="cart-controls-row">
+                    <div class="qty-selector-sm">
+                        <button class="btn-qty-sm" onclick="app.adjustCartQtd(${idx}, -1)">-</button>
+                        <span class="qty-display-sm">${item.qtd}</span>
+                        <button class="btn-qty-sm" onclick="app.adjustCartQtd(${idx}, 1)">+</button>
+                    </div>
+                    <div class="cart-item-price">R$ ${item.total.toLocaleString('pt-BR')}</div>
+                </div>
+                <div class="btn-remove-item" onclick="app.removeFromCart(${idx})">&times;</div>
+            </div>`;
+        });
+
+        container.innerHTML = html;
+        const faccaoNet = (grandTotal * 0.70) - totalProdCost;
+        this.dom['cart-summary-area'].innerHTML = `
+        <div class="cart-summary-box">
+            <div class="summary-total">💸 Total: R$ ${grandTotal.toLocaleString('pt-BR')}</div>
+            <div class="summary-seller">💰 Vendedor (30%): R$ ${(grandTotal * 0.30).toLocaleString('pt-BR')}</div>
+            <div class="summary-faction">🔥 Facção: R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
+        </div>`;
     },
 
+    // --- CÁLCULO DE PRODUÇÃO ---
     calculateCartProduction() {
         if (this.state.cart.length === 0) return this.showToast('Carrinho vazio!', 'error');
-        const totalMats = [0, 0, 0, 0];
-        const specificProjects = []; 
-        let totalMatWeight = 0, totalProdWeight = 0, detailsHTML = "";
         
+        const totalMats = [0, 0, 0, 0];
+        let totalMatWeight = 0, totalProdWeight = 0, detailsHTML = "";
+
         this.state.cart.forEach(item => {
             totalProdWeight += item.weight * item.qtd;
             if (item.recipe) {
@@ -256,27 +334,20 @@ setDefaults() {
                 let itemMatsHTML = "";
                 item.recipe.forEach((qtd, i) => {
                     const totalM = qtd * crafts;
-                    if (i === 3 && totalM > 0) {
-                        specificProjects.push({ name: `Proj. ${item.name}`, qtd: totalM });
-                        totalMatWeight += totalM * CONFIG.MAT_WEIGHTS[i];
-                    } else {
-                        totalMats[i] += totalM;
-                        totalMatWeight += totalM * CONFIG.MAT_WEIGHTS[i];
-                    }
+                    totalMats[i] += totalM;
+                    totalMatWeight += totalM * CONFIG.MAT_WEIGHTS[i];
                     if (totalM > 0) itemMatsHTML += `<div class="mat-item-tiny"><span>${CONFIG.MAT_NAMES[i]}:</span> <b>${totalM}</b></div>`;
                 });
-                detailsHTML += `<div class="detail-card-small"><div class="detail-header-small"><span class="detail-name">${item.name}</span><span class="badge-count-small">x${item.qtd}</span></div><div class="mats-grid-small">${itemMatsHTML}</div></div>`;
+                detailsHTML += `
+                <div class="detail-card-small">
+                    <div class="detail-header-small"><span class="detail-name">${item.name}</span><span class="badge-count-small">x${item.qtd}</span></div>
+                    <div class="mats-grid-small">${itemMatsHTML}</div>
+                </div>`;
             }
         });
 
-        let matsHtml = totalMats.map((t, i) => {
-            if (i === 3) return ''; 
-            return t > 0 ? `<div class="mat-tag-pill"><span>${CONFIG.MAT_NAMES[i]}:</span> <b>${t}</b></div>` : '';
-        }).join('');
-
-        specificProjects.forEach(proj => {
-            matsHtml += `<div class="mat-tag-pill project-tag"><span>${proj.name}:</span> <b>${proj.qtd}</b></div>`;
-        });
+        let matsHtml = totalMats.map((t, i) => i !== 3 && t > 0 ? `<div class="mat-tag-pill"><span>${CONFIG.MAT_NAMES[i]}:</span> <b>${t}</b></div>` : '').join('');
+        if (totalMats[3] > 0) matsHtml += `<div class="mat-tag-pill project-tag"><span>Projeto:</span> <b>${totalMats[3]}</b></div>`;
 
         this.dom['mats-list-display'].innerHTML = matsHtml;
         this.dom['sales-production-details'].innerHTML = detailsHTML;
@@ -288,44 +359,61 @@ setDefaults() {
         area.scrollIntoView({ behavior: 'smooth' });
     },
 
+    closeProduction() {
+        this.dom['cart-production-area'].classList.add('hidden');
+    },
+
+    // --- PARTICIPANTES (AÇÕES) ---
     addParticipant() {
         const val = this.dom['novo-participante'].value.trim();
-        if(!val) return;
-        if(this.state.participants.has(val)) return;
+        if (!val) return;
+        if (this.state.participants.has(val)) return;
         this.state.participants.add(val);
         this.renderParticipants();
         this.dom['novo-participante'].value = "";
     },
-    removeParticipant(val) { this.state.participants.delete(val); this.renderParticipants(); },
+    removeParticipant(val) {
+        this.state.participants.delete(val);
+        this.renderParticipants();
+    },
     renderParticipants() {
         let html = '';
         this.state.participants.forEach(p => html += `<div class="chip">${p} <span onclick="app.removeParticipant('${p}')">&times;</span></div>`);
         this.dom['lista-participantes'].innerHTML = html;
     },
-    handleEnterParticipant(e) { if(e.key === 'Enter') this.addParticipant(); },
+    handleEnterParticipant(e) {
+        if (e.key === 'Enter') this.addParticipant();
+    },
 
-    // --- ENVIOS ---
+    // --- REDE E PERSISTÊNCIA (WEBHOOKS & FIREBASE) ---
     async sendWebhook(url, payload, msg, cb) {
         try {
-            await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-            if(msg) this.showToast(msg);
-            if(cb) cb();
-        } catch(e) { console.error(e); this.showToast("Erro no Discord", "error"); }
+            await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            if (msg) this.showToast(msg);
+            if (cb) cb();
+        } catch (e) {
+            console.error(e);
+            this.showToast("Erro no Discord", "error");
+        }
     },
 
     sendActionWebhook() {
         const tipo = this.dom['acao-tipo'].value;
-        if(!tipo) return this.showToast("Selecione o local", "error");
-        
+        if (!tipo) return this.showToast("Selecione o local", "error");
+
         const resultado = document.querySelector('input[name="resultado"]:checked')?.value;
-        if(!resultado) return this.showToast("Selecione o resultado", "error");
+        if (!resultado) return this.showToast("Selecione o resultado", "error");
 
         const dataF = this.formatDate(this.dom['acao-data'].value);
         const hora = this.dom['acao-hora'].value;
         const parts = Array.from(this.state.participants).join('\n> • ');
         const color = resultado === 'Vitória' ? 3066993 : 15158332;
 
-        const embedMain = {
+        const embed = {
             username: "TrojanHelper",
             embeds: [{
                 title: `⚔️ Registro de Ação: ${tipo}`,
@@ -335,101 +423,55 @@ setDefaults() {
                     { name: "Motivo", value: "Ação Blipada", inline: true },
                     { name: "Data/Hora", value: `${dataF} às ${hora}`, inline: false },
                     { name: "Participantes", value: parts ? `> • ${parts}` : "> Ninguém registrado" }
-                ],
-                footer: { text: "Sistema de Gestão TRJ" }
+                ]
             }]
         };
-
-        const embedLog = {
-            username: "Trojan Log",
-            embeds: [{
-                color: color,
-                description: `**Ação:** ${tipo}\n**Data:** ${dataF}\n**Hora:** ${hora}\n**Motivo:** Ação Blipada\n**Resultado:** ${resultado}`
-            }]
-        };
-
-        this.sendWebhook(CONFIG.WEBHOOKS.ACOES, embedMain, "Ação registrada!", () => {
+        this.sendWebhook(CONFIG.WEBHOOKS.ACOES, embed, "Ação registrada!", () => {
             this.state.participants.clear();
             this.renderParticipants();
         });
-        this.sendWebhook(CONFIG.WEBHOOKS.LOGS, embedLog);
     },
 
     async sendSaleWebhook() {
         if (this.state.cart.length === 0) return this.showToast('Carrinho vazio!', 'error');
-        const vendedor = this.dom['venda-vendedor'].value.trim();
-        const faccao = this.dom['venda-faccao'].value.trim();
-        if (!vendedor || !faccao) return this.showToast('Preencha Vendedor e Facção!', 'error');
-
-        let grandTotal = 0, totalProdCost = 0;
-        let itemsDesc = "";
-        const itemsLogStr = [];
-
-        this.state.cart.forEach(i => {
-            grandTotal += i.total;
-            totalProdCost += (i.cost * i.qtd);
-            itemsDesc += `• ${i.name} — ${i.qtd}x — R$ ${i.total.toLocaleString('pt-BR')}\n`;
-            itemsLogStr.push(`${i.name} (${i.qtd}x)`);
-        });
-
-        const faccaoNet = (grandTotal * 0.70) - totalProdCost;
-        const timeStr = this.dom['venda-hora'].value;
-        const dateStr = this.formatDate(this.dom['venda-data'].value);
         const dataInput = this.dom['venda-data'].value;
         const horaInput = this.dom['venda-hora'].value;
 
-        // Salvar no Firebase
+        const vendaData = {
+            vendedor: this.dom['venda-vendedor'].value,
+            faccao: this.dom['venda-faccao'].value,
+            itens: this.state.cart,
+            data: new Date(`${dataInput}T${horaInput}`),
+            total: this.state.cart.reduce((a, b) => a + b.total, 0),
+            lucroFaccao: this.state.cart.reduce((acc, item) => acc + (item.total * 0.70) - (item.cost * item.qtd), 0),
+            custoProducao: this.state.cart.reduce((acc, item) => acc + (item.cost * item.qtd), 0)
+        };
+
         try {
-            await db.collection("vendas_trojan").add({
-                vendedor: vendedor,
-                faccao: faccao,
-                itens: this.state.cart.map(i => ({ nome: i.name, qtd: i.qtd, id: i.id })),
-                total: grandTotal,
-                lucroFaccao: faccaoNet,
-                custoProducao: totalProdCost,
-                data: new Date(`${dataInput}T${horaInput}`),
-                dataString: dateStr
-            });
+            await db.collection("vendas_trojan").add(vendaData);
             this.showToast("Venda salva!");
             this.clearCart();
-            // Atualiza dashboard se estiver no modo admin
-            if(this.state.isAdmin) this.loadDashboard();
-        } catch(e) { console.error(e); this.showToast("Erro ao salvar", "error"); }
+            if (this.state.isAdmin) this.loadDashboard();
+        } catch (e) {
+            console.error(e);
+            this.showToast("Erro ao salvar", "error");
+        }
 
-        // Webhook Principal
         const embedMain = {
             username: "TrojanHelper",
             embeds: [{
                 title: "📄 Venda Registrada",
                 color: 5644438,
                 fields: [
-                    { name: "💼 Vendedor", value: vendedor, inline: true },
-                    { name: "🏛️ Facção Compradora", value: faccao, inline: true },
-                    { name: "📦 Itens", value: itemsDesc, inline: false },
-                    { name: "💸 Total Venda", value: `R$ ${grandTotal.toLocaleString('pt-BR')}`, inline: true },
-                    { name: "🔨 Custo Produção", value: `R$ ${totalProdCost.toLocaleString('pt-BR')}`, inline: true },
-                    { name: "💰 Vendedor (30%)", value: `R$ ${(grandTotal * 0.30).toLocaleString('pt-BR')}`, inline: true },
-                    { name: "🔥 Facção (Liq.)", value: `**R$ ${faccaoNet.toLocaleString('pt-BR')}**`, inline: false }
+                    { name: "💼 Vendedor", value: vendaData.vendedor, inline: true },
+                    { name: "🏛️ Facção", value: vendaData.faccao, inline: true },
+                    { name: "📦 Itens", value: vendaData.itens.map(i => `${i.name} (${i.qtd}x)`).join('\n'), inline: false },
+                    { name: "💸 Total", value: `R$ ${vendaData.total.toLocaleString('pt-BR')}`, inline: true }
                 ],
-                footer: { text: `Data: ${dateStr} às ${timeStr}` }
+                footer: { text: `Data: ${this.formatDate(dataInput)} ${horaInput}` }
             }]
         };
-
-        // Webhook Log
-        const embedLog = {
-            username: "Trojan Log",
-            embeds: [{
-                color: 5644438,
-                description: `**Venda:** ${itemsLogStr.join(', ')}\n**Data:** ${dateStr}\n**Hora:** ${timeStr}\n**Família:** ${faccao}`
-            }]
-        };
-
-        this.sendWebhook(CONFIG.WEBHOOKS.VENDAS, embedMain, "Venda registrada!", () => {
-            this.clearCart();
-            this.dom['venda-vendedor'].value = '';
-            this.dom['venda-faccao'].value = '';
-        });
-        this.sendWebhook(CONFIG.WEBHOOKS.LOGS, embedLog);
+        this.sendWebhook(CONFIG.WEBHOOKS.VENDAS, embedMain);
     },
 
     async loadDashboard() {
@@ -440,7 +482,7 @@ setDefaults() {
             const dataAtual = new Date();
             const inicioMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
             const snapshot = await db.collection("vendas_trojan").where("data", ">=", inicioMes).get();
-            
+
             let totalVendas = 0, faturamentoFaccao = 0, totalBruto = 0, totalItens = 0, itemCounts = {};
 
             snapshot.forEach((doc) => {
@@ -461,7 +503,7 @@ setDefaults() {
             this.dom['stat-total-itens'].innerText = totalItens;
             if (this.dom['stat-total-bruto']) this.dom['stat-total-bruto'].innerText = `R$ ${totalBruto.toLocaleString('pt-BR')}`;
 
-            const sortedItems = Object.entries(itemCounts).sort(([,a], [,b]) => b - a).slice(0, 5);
+            const sortedItems = Object.entries(itemCounts).sort(([, a], [, b]) => b - a).slice(0, 5);
             let topHtml = sortedItems.length ? sortedItems.map(([n, q]) => `<div class="top-item"><span>${n}</span><span class="top-item-qtd">${q}</span></div>`).join('') : '<p class="text-muted italic text-center">Nenhuma venda.</p>';
             this.dom['stats-top-itens'].innerHTML = topHtml;
         } catch (e) {
@@ -470,38 +512,78 @@ setDefaults() {
         }
     },
 
-    switchTab(tabId, event) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        if (event) event.currentTarget.classList.add('active');
-        if (tabId === 'estatisticas' && this.state.isAdmin) this.loadDashboard();
-    },
-
-    startTutorial() { this.state.tutorialActive = true; this.state.tutorialStepIndex = 0; this.dom['tutorial-box'].classList.remove('hidden'); this.renderTutorialStep(); },
-    endTutorial() { this.state.tutorialActive = false; this.dom['tutorial-box'].classList.add('hidden'); this.cleanHighlights(); },
-    cleanHighlights() { document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight')); document.querySelectorAll('.tutorial-active-parent').forEach(el => el.classList.remove('tutorial-active-parent')); },
-    
-    // --- TUTORIAL COMPLETO ---
+    // --- SISTEMA DE TUTORIAL ---
     getTutorialSteps() {
         return [
-            { tab: 'vendas', elementId: 'area-vendedor-info', title: "1. Identificação", text: "Preencha vendedor e facção." },
-            { tab: 'vendas', elementId: 'area-tabela-preco', title: "2. Tabela de Preços", text: "Parceria ou Pista? O sistema ajusta." },
-            { tab: 'vendas', elementId: 'sales-catalog', title: "3. Catálogo", text: "Selecione as armas." },
-            { tab: 'vendas', elementId: 'area-carrinho', title: "4. Carrinho", text: "Confira e envie o log." },
-            { tab: 'vendas', elementId: 'area-producao', title: "5. Produção", text: "Calcule os materiais." },
-            { tab: 'acoes', elementId: 'acoes', title: "6. Ações", text: "Registre PvP." },
-            { tab: 'vendas', elementId: 'btn-admin-secret', title: "7. Admin", text: "Clique aqui para ver Estatísticas." }
+            { tab: 'vendas', elementId: 'area-vendedor-info', title: "1. Identificação", text: "Comece preenchendo o seu nome e a facção do cliente." },
+            { tab: 'vendas', elementId: 'area-tabela-preco', title: "2. Tabela de Preços", text: "Escolha entre preço de <b>Parceria</b> ou <b>Pista</b>. O sistema atualiza os valores automaticamente." },
+            { tab: 'vendas', elementId: 'sales-catalog', title: "3. Catálogo", text: "Clique nos itens para selecionar. Defina a quantidade e adicione ao carrinho." },
+            { tab: 'vendas', elementId: 'area-carrinho', title: "4. Carrinho & Envio", text: "Revise os itens e clique em <b>Finalizar</b> para enviar o log para o Discord." },
+            { tab: 'vendas', elementId: 'area-producao', title: "5. Calculadora de Produção", text: "Descubra exatamente quantos materiais (cobre, alumínio, etc.) você precisa para fabricar o pedido." },
+            { tab: 'acoes', elementId: 'acoes', title: "6. Registro de Ações", text: "Registre vitórias ou derrotas em PvP e ações da facção." },
+            { tab: 'vendas', elementId: 'btn-admin-secret', title: "7. Modo Admin", text: "Clique em <b>Sistema Online</b> para revelar a aba secreta de <b>Estatísticas</b>." }
         ];
     },
 
-    prevTutorialStep() { if(this.state.tutorialStepIndex > 0) { this.cleanHighlights(); this.state.tutorialStepIndex--; this.renderTutorialStep(); } },
-    nextTutorialStep() { const s = this.getTutorialSteps(); this.cleanHighlights(); this.state.tutorialStepIndex++; if(this.state.tutorialStepIndex >= s.length) { this.endTutorial(); this.showToast("Fim!"); } else this.renderTutorialStep(); },
-    renderTutorialStep() { const s = this.getTutorialSteps(); const step = s[this.state.tutorialStepIndex]; this.switchTab(step.tab); this.dom['tut-title'].innerText = step.title; this.dom['tut-text'].innerHTML = step.text; this.dom['tut-progress'].innerText = `${this.state.tutorialStepIndex + 1}/${s.length}`; this.dom['btn-tut-prev'].disabled = (this.state.tutorialStepIndex === 0); setTimeout(() => { const el = document.getElementById(step.elementId); if(el) { el.classList.add('tutorial-highlight'); const p = el.closest('.card'); if(p) p.classList.add('tutorial-active-parent'); el.scrollIntoView({behavior:'smooth',block:'center'}); } }, 400); },
-    
-    copyAdText(el) { navigator.clipboard.writeText(el.innerText).then(() => this.showToast("Copiado!")); },
-    showToast(msg, type='success') { const t = document.createElement('div'); t.className=`toast ${type}`; t.innerText=msg; this.dom['toast-container'].appendChild(t); setTimeout(()=>t.remove(), 3000); },
-    formatDate(d) { if(!d) return ''; const [y,m,d2] = d.split('-'); return `${d2}/${m}/${y}`; }
+    startTutorial() {
+        this.state.tutorialActive = true;
+        this.state.tutorialStepIndex = 0;
+        this.dom['tutorial-box'].classList.remove('hidden');
+        this.renderTutorialStep();
+    },
+
+    endTutorial() {
+        this.state.tutorialActive = false;
+        this.dom['tutorial-box'].classList.add('hidden');
+        this.cleanHighlights();
+    },
+
+    cleanHighlights() {
+        document.querySelectorAll('.tutorial-highlight').forEach(el => el.classList.remove('tutorial-highlight'));
+        document.querySelectorAll('.tutorial-active-parent').forEach(el => el.classList.remove('tutorial-active-parent'));
+    },
+
+    prevTutorialStep() {
+        if (this.state.tutorialStepIndex > 0) {
+            this.cleanHighlights();
+            this.state.tutorialStepIndex--;
+            this.renderTutorialStep();
+        }
+    },
+
+    nextTutorialStep() {
+        const s = this.getTutorialSteps();
+        this.cleanHighlights();
+        this.state.tutorialStepIndex++;
+        if (this.state.tutorialStepIndex >= s.length) {
+            this.endTutorial();
+            this.showToast("Fim!");
+        } else {
+            this.renderTutorialStep();
+        }
+    },
+
+    renderTutorialStep() {
+        const s = this.getTutorialSteps();
+        const step = s[this.state.tutorialStepIndex];
+
+        this.switchTab(step.tab);
+
+        this.dom['tut-title'].innerText = step.title;
+        this.dom['tut-text'].innerHTML = step.text;
+        this.dom['tut-progress'].innerText = `${this.state.tutorialStepIndex + 1}/${s.length}`;
+        this.dom['btn-tut-prev'].disabled = (this.state.tutorialStepIndex === 0);
+
+        setTimeout(() => {
+            const el = document.getElementById(step.elementId);
+            if (el) {
+                el.classList.add('tutorial-highlight');
+                const p = el.closest('.card');
+                if (p) p.classList.add('tutorial-active-parent');
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 400);
+    }
 };
 
 document.addEventListener('DOMContentLoaded', () => app.init());
