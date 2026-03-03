@@ -80,7 +80,8 @@ const app = {
             'total-mat-weight-display', 'total-prod-weight-display',
             'toast-container',
             'tutorial-box', 'tut-title', 'tut-text', 'tut-progress', 'btn-tut-prev',
-            'stat-total-vendas', 'stat-faturamento', 'stat-total-itens', 'stats-top-itens', 'stat-total-bruto'
+            'stat-total-vendas', 'stat-faturamento', 'stat-total-itens', 'stats-top-itens', 'stat-total-bruto',
+            'filtro-inicio', 'filtro-fim'
         ];
         ids.forEach(id => this.dom[id] = document.getElementById(id));
     },
@@ -101,6 +102,13 @@ const app = {
             if (d) d.value = dateStr;
             if (t) t.value = timeStr;
         });
+
+        const firstDayStr = new Intl.DateTimeFormat('en-CA', { 
+            timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' 
+        }).format(new Date(now.getFullYear(), now.getMonth(), 1));
+
+        if (this.dom['filtro-inicio']) this.dom['filtro-inicio'].value = firstDayStr;
+        if (this.dom['filtro-fim']) this.dom['filtro-fim'].value = dateStr;
     },
 
     switchTab(tabId, event) {
@@ -377,12 +385,10 @@ const app = {
         if (e.key === 'Enter') this.addParticipant();
     },
 
-    // --- CORREÇÃO APLICADA AQUI NA FUNÇÃO FETCH ---
     async sendWebhook(url, payload, msg, cb) {
         try {
             await fetch(url, {
                 method: "POST",
-                // Removido o 'mode: "no-cors"' para permitir o formato JSON
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             });
@@ -420,13 +426,13 @@ const app = {
             }]
         };
 
-        // 1. Envio para a Webhook Principal de Ações
+        // 1. Envio Principal
         this.sendWebhook(CONFIG.WEBHOOKS.ACOES, embedMainAcao, "Ação registrada!", () => {
             this.state.participants.clear();
             this.renderParticipants();
         });
 
-        // 2. Envio do Log Resumido de Ações
+        // 2. Envio Log Resumido
         if (CONFIG.WEBHOOKS.LOGS_ACOES) {
             const embedLogAcao = {
                 username: "Trojan Log",
@@ -444,7 +450,7 @@ const app = {
         
         const dataInput = this.dom['venda-data'].value;
         const horaInput = this.dom['venda-hora'].value;
-        const itensCopia = [...this.state.cart]; // Evita conflito ao limpar o carrinho
+        const itensCopia = [...this.state.cart]; 
         
         const vendaData = {
             vendedor: this.dom['venda-vendedor'].value,
@@ -481,10 +487,10 @@ const app = {
             }]
         };
 
-        // 1. Envia para o canal principal de Vendas
+        // 1. Envio Principal
         this.sendWebhook(CONFIG.WEBHOOKS.VENDAS, embedMainVenda);
         
-        // 2. Envia para o log resumido de Vendas
+        // 2. Envio Log Resumido
         if (CONFIG.WEBHOOKS.LOGS_VENDAS) {
             const itensList = vendaData.itens.map(i => `• ${i.name} (${i.qtd}x)`).join('\n');
             const dataFormatada = this.formatDate(dataInput);
@@ -505,9 +511,15 @@ const app = {
         this.dom['stats-top-itens'].innerHTML = '<p class="text-muted italic">Carregando...</p>';
 
         try {
-            const dataAtual = new Date();
-            const inicioMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
-            const snapshot = await db.collection("vendas_trojan").where("data", ">=", inicioMes).get();
+            const dataInicioStr = this.dom['filtro-inicio'].value;
+            const dataFimStr = this.dom['filtro-fim'].value;
+            const dataInicio = new Date(`${dataInicioStr}T00:00:00`);
+            const dataFim = new Date(`${dataFimStr}T23:59:59`);
+
+            const snapshot = await db.collection("vendas_trojan")
+                .where("data", ">=", dataInicio)
+                .where("data", "<=", dataFim)
+                .get();
 
             let totalVendas = 0, faturamentoFaccao = 0, totalBruto = 0, totalItens = 0, itemCounts = {};
 
@@ -516,10 +528,12 @@ const app = {
                 totalVendas++;
                 faturamentoFaccao += (data.lucroFaccao || 0);
                 totalBruto += (data.total || 0);
+                
                 if (data.itens) {
                     data.itens.forEach(item => {
+                        const itemName = item.name || item.nome; 
                         totalItens += item.qtd;
-                        itemCounts[item.nome] = (itemCounts[item.nome] || 0) + item.qtd;
+                        itemCounts[itemName] = (itemCounts[itemName] || 0) + item.qtd;
                     });
                 }
             });
@@ -530,11 +544,12 @@ const app = {
             if (this.dom['stat-total-bruto']) this.dom['stat-total-bruto'].innerText = `R$ ${totalBruto.toLocaleString('pt-BR')}`;
 
             const sortedItems = Object.entries(itemCounts).sort(([, a], [, b]) => b - a).slice(0, 5);
-            let topHtml = sortedItems.length ? sortedItems.map(([n, q]) => `<div class="top-item"><span>${n}</span><span class="top-item-qtd">${q}</span></div>`).join('') : '<p class="text-muted italic text-center">Nenhuma venda.</p>';
+            let topHtml = sortedItems.length ? sortedItems.map(([n, q]) => `<div class="top-item"><span>${n}</span><span class="top-item-qtd">${q}</span></div>`).join('') : '<p class="text-muted italic text-center">Nenhuma venda encontrada no período.</p>';
             this.dom['stats-top-itens'].innerHTML = topHtml;
+            
         } catch (e) {
             console.error("Erro Dashboard:", e);
-            this.dom['stats-top-itens'].innerHTML = '<p class="error">Erro ao carregar.</p>';
+            this.dom['stats-top-itens'].innerHTML = '<p class="text-muted italic" style="color:#ef4444;">Erro de permissão no Firebase. Atualize as regras do banco de dados.</p>';
         }
     },
 
