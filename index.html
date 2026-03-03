@@ -135,17 +135,22 @@
 
 <div id="estatisticas" class="section">
     <div class="card">
-        <div class="cart-header">
-            <h2>📊 Dashboard Mensal (ADMIN)</h2>
-            <button class="btn btn-small" onclick="app.loadDashboard()">🔄 Atualizar</button>
+        <div class="cart-header" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px;">
+            <h2 style="margin: 0;">📊 Dashboard (ADMIN)</h2>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="date" id="filtro-inicio" style="padding: 8px; width: auto; font-size: 0.85rem;">
+                <span class="text-muted">até</span>
+                <input type="date" id="filtro-fim" style="padding: 8px; width: auto; font-size: 0.85rem;">
+                <button class="btn btn-small" onclick="app.loadDashboard()" style="padding: 0 15px;">🔍 Filtrar</button>
+            </div>
         </div>
-        <p class="text-muted text-center mb-15">Dados sincronizados em tempo real com a nuvem.</p>
+        <p class="text-muted text-center mb-15 mt-15">Dados sincronizados em tempo real com a nuvem.</p>
         
         <div class="stats-grid">
             <div class="stat-card">
                 <h3>Vendas Realizadas</h3>
                 <div class="stat-number" id="stat-total-vendas">0</div>
-                <div class="stat-desc">Registros este mês</div>
+                <div class="stat-desc">Registros no período</div>
             </div>
             <div class="stat-card">
                 <h3>Total Movimentado</h3>
@@ -231,7 +236,7 @@
         <div class="copy-card" onclick="app.copyAdText(this)">
             🚨🚨TROJAN NA ATIVA 🚨🚨
 
-            🔥🔫 GARANTA SEU ARMAMENTO 🔫  🔥
+            🔥🔫 GARANTA SEU ARMAMENTO 🔫 🔥
 
             Chama no canal > Trojan
         </div>
