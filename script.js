@@ -29,22 +29,23 @@ const CONFIG = {
     WEBHOOKS: {
         ACOES: "https://discord.com/api/webhooks/1438189798849384560/lote5LpQxF80SDUZ3QdPOj2aHiQ7JtcJWKfTNxErKA0MjhDdQ86vruN74dnNUy0YMowD",
         VENDAS: "https://discord.com/api/webhooks/1434731757953093662/gElahX6G0yY6h-DVQx1RQ8wOu6IJGi-k2M20fEVOgNBy-WT3ztobwuPspLB6hLaeAy6z",
-        LOGS: "NAO TEM AINDA"
+        LOGS_ACOES: "https://discord.com/api/webhooks/1478224298576707857/8hzK-dLqXSDXX_Nf2JFVEGAagzKZP5N5W4VsT3cTPQdSMseW1pDX3Xc4gZvfZw5Ln_s6",
+        LOGS_VENDAS: "https://discord.com/api/webhooks/1478225470011998240/2XJlatv2dVIvA3BoJQmOQKtbymdAQzQjZd3J1DycA3Z03TSNJBeCvy4s-ScOpWYT3sbs"
     },
     MAT_NAMES: ["Alumínio", "Cobre", "Materiais", "Projeto"],
     MAT_WEIGHTS: [0.01, 0.01, 0.01, 0.01]
 };
 
 const CATALOG = {
-    'fn_five_seven': { name: "Fn Five Seven (PT)", category: "Pistolas",       price: { min: 53000, max: 63600 },   weight: 1.5,  cost: 10000, recipe: [17, 13, 26, 25] },
-    'hk_p7m10':      { name: "HK P7M10 (Fajuta)",  category: "Pistolas",       price: { min: 25000, max: 30000 },   weight: 1.0,  cost: 5000,  recipe: [17, 13, 26, 25] },
-    'tec_9':         { name: "Tec-9 (Sub)",        category: "Submetralhadoras", price: { min: 90000, max: 110000 },  weight: 1.75, cost: 20000, recipe: [34, 26, 33, 25] },
-    'uzi':           { name: "Uzi (Sub)",          category: "Submetralhadoras", price: { min: 120000, max: 140000 }, weight: 1.25, cost: 20000, recipe: [48, 39, 38, 35] },
-    'mtar_21':       { name: "Mtar-21 (Sub)",      category: "Submetralhadoras", price: { min: 150000, max: 170000 }, weight: 5.0,  cost: 25000, recipe: [51, 39, 38, 35] },
-    'ak_74':         { name: "Ak-74 (Fuzil)",      category: "Fuzis",          price: { min: 240000, max: 260000 }, weight: 8.0,  cost: 35000, recipe: [85, 65, 40, 40] },
-    'g36c':          { name: "G36C (Fuzil)",       category: "Fuzis",          price: { min: 260000, max: 280000 }, weight: 8.0,  cost: 30000, recipe: [85, 65, 40, 40] },
-    'ak_compact':    { name: "Ak Compact (Fuzil)", category: "Fuzis",          price: { min: 190000, max: 210000 }, weight: 2.25, cost: 40000, recipe: [85, 70, 50, 40] },
-    'mossberg':      { name: "Mossberg 590",       category: "Escopetas",      price: { min: 260000, max: 280000 }, weight: 6.0,  cost: 35000, recipe: [90, 75, 50, 40] }
+    'fn_five_seven': { name: "Fn Five Seven (PT)", category: "Pistolas",       price: { min: 55000, max: 65000 },   weight: 1.5,  cost: 10000, recipe: [10, 10, 10, 10] },
+    'hk_p7m10':      { name: "HK P7M10 (Fajuta)",  category: "Pistolas",       price: { min: 25000, max: 30000 },   weight: 1.0,  cost: 5000,  recipe: [10, 10, 10, 10] },
+    'tec_9':         { name: "Tec-9 (Sub)",        category: "Submetralhadoras", price: { min: 90000, max: 110000 },  weight: 1.75, cost: 20000, recipe: [20, 20, 20, 20] },
+    'uzi':           { name: "Uzi (Sub)",          category: "Submetralhadoras", price: { min: 120000, max: 140000 }, weight: 1.25, cost: 20000, recipe: [20, 20, 20, 20] },
+    'mtar_21':       { name: "Mtar-21 (Sub)",      category: "Submetralhadoras", price: { min: 150000, max: 170000 }, weight: 5.0,  cost: 25000, recipe: [20, 20, 20, 20] },
+    'ak_74':         { name: "Ak-74 (Fuzil)",      category: "Fuzis",          price: { min: 240000, max: 260000 }, weight: 8.0,  cost: 35000, recipe: [25, 25, 25, 25] },
+    'g36c':          { name: "G36C (Fuzil)",       category: "Fuzis",          price: { min: 260000, max: 280000 }, weight: 8.0,  cost: 30000, recipe: [25, 25, 25, 25] },
+    'ak_compact':    { name: "Ak Compact (Fuzil)", category: "Fuzis",          price: { min: 190000, max: 210000 }, weight: 2.25, cost: 40000, recipe: [25, 25, 25, 25] },
+    'mossberg':      { name: "Mossberg 590",       category: "Escopetas",      price: { min: 260000, max: 280000 }, weight: 6.0,  cost: 35000, recipe: [25, 25, 25, 25] }
 };
 
 /**
@@ -53,7 +54,6 @@ const CATALOG = {
  * =============================================================================
  */
 const app = {
-    // --- ESTADO DA APLICAÇÃO ---
     state: {
         participants: new Set(),
         cart: [],
@@ -65,7 +65,6 @@ const app = {
     },
     dom: {},
 
-    // --- CICLO DE VIDA ---
     init() {
         this.cacheDOM();
         this.setDefaults();
@@ -74,19 +73,13 @@ const app = {
 
     cacheDOM() {
         const ids = [
-            // Ações
             'acao-tipo', 'acao-data', 'acao-hora', 'novo-participante', 'lista-participantes',
-            // Vendas
             'venda-vendedor', 'venda-faccao', 'venda-data', 'venda-hora', 'venda-preco', 'venda-qtd',
             'sales-catalog', 'price-controls', 'select-msg', 'cart-items', 'cart-summary-area',
-            // Produção
             'cart-production-area', 'mats-list-display', 'sales-production-details',
             'total-mat-weight-display', 'total-prod-weight-display',
-            // UI Geral
             'toast-container',
-            // Tutorial
             'tutorial-box', 'tut-title', 'tut-text', 'tut-progress', 'btn-tut-prev',
-            // Estatísticas
             'stat-total-vendas', 'stat-faturamento', 'stat-total-itens', 'stats-top-itens', 'stat-total-bruto'
         ];
         ids.forEach(id => this.dom[id] = document.getElementById(id));
@@ -94,21 +87,12 @@ const app = {
 
     setDefaults() {
         const now = new Date();
-        
-        // Força a data para o fuso de Brasília (formato YYYY-MM-DD exigido pelo input date)
         const dateStr = new Intl.DateTimeFormat('en-CA', { 
-            timeZone: 'America/Sao_Paulo', 
-            year: 'numeric', 
-            month: '2-digit', 
-            day: '2-digit' 
+            timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' 
         }).format(now);
         
-        // Força a hora para o fuso de Brasília (formato HH:MM)
         const timeStr = new Intl.DateTimeFormat('pt-BR', { 
-            timeZone: 'America/Sao_Paulo', 
-            hour: '2-digit', 
-            minute: '2-digit',
-            hour12: false
+            timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit', hour12: false
         }).format(now);
 
         ['acao', 'venda'].forEach(prefix => {
@@ -119,7 +103,6 @@ const app = {
         });
     },
 
-    // --- NAVEGAÇÃO E UI ---
     switchTab(tabId, event) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -160,7 +143,6 @@ const app = {
         return `${d2}/${m}/${y}`;
     },
 
-    // --- CATÁLOGO E SELEÇÃO ---
     renderCatalog() {
         const grouped = {};
         const categories = ["Pistolas", "Submetralhadoras", "Fuzis", "Escopetas", "Outros"];
@@ -233,7 +215,6 @@ const app = {
         }
     },
 
-    // --- CONTROLES DE INPUT ---
     validateInput(el) {
         let val = parseInt(el.value);
         if (isNaN(val) || val < 1) el.value = 1;
@@ -247,7 +228,6 @@ const app = {
         el.value = val;
     },
 
-    // --- GERENCIAMENTO DO CARRINHO ---
     addToCart() {
         const id = this.state.selectedItemId;
         if (!id) return this.showToast('Selecione uma arma', 'error');
@@ -334,7 +314,6 @@ const app = {
         </div>`;
     },
 
-    // --- CÁLCULO DE PRODUÇÃO ---
     calculateCartProduction() {
         if (this.state.cart.length === 0) return this.showToast('Carrinho vazio!', 'error');
         
@@ -377,7 +356,6 @@ const app = {
         this.dom['cart-production-area'].classList.add('hidden');
     },
 
-    // --- PARTICIPANTES (AÇÕES) ---
     addParticipant() {
         const val = this.dom['novo-participante'].value.trim();
         if (!val) return;
@@ -399,12 +377,12 @@ const app = {
         if (e.key === 'Enter') this.addParticipant();
     },
 
-    // --- REDE E PERSISTÊNCIA (WEBHOOKS & FIREBASE) ---
+    // --- CORREÇÃO APLICADA AQUI NA FUNÇÃO FETCH ---
     async sendWebhook(url, payload, msg, cb) {
         try {
             await fetch(url, {
                 method: "POST",
-                mode: "no-cors", /* CRUCIAL para evitar bloqueios de CORS dentro do FiveM */
+                // Removido o 'mode: "no-cors"' para permitir o formato JSON
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             });
@@ -428,7 +406,7 @@ const app = {
         const parts = Array.from(this.state.participants).join('\n> • ');
         const color = resultado === 'Vitória' ? 3066993 : 15158332;
 
-        const embed = {
+        const embedMainAcao = {
             username: "TrojanHelper",
             embeds: [{
                 title: `⚔️ Registro de Ação: ${tipo}`,
@@ -441,21 +419,37 @@ const app = {
                 ]
             }]
         };
-        this.sendWebhook(CONFIG.WEBHOOKS.ACOES, embed, "Ação registrada!", () => {
+
+        // 1. Envio para a Webhook Principal de Ações
+        this.sendWebhook(CONFIG.WEBHOOKS.ACOES, embedMainAcao, "Ação registrada!", () => {
             this.state.participants.clear();
             this.renderParticipants();
         });
+
+        // 2. Envio do Log Resumido de Ações
+        if (CONFIG.WEBHOOKS.LOGS_ACOES) {
+            const embedLogAcao = {
+                username: "Trojan Log",
+                embeds: [{
+                    color: color,
+                    description: `**Ação:** ${tipo}\n**Data:** ${dataF}\n**Hora:** ${hora}\n**Motivo:** Ação Blipada\n**Resultado:** ${resultado}`
+                }]
+            };
+            this.sendWebhook(CONFIG.WEBHOOKS.LOGS_ACOES, embedLogAcao);
+        }
     },
 
     async sendSaleWebhook() {
         if (this.state.cart.length === 0) return this.showToast('Carrinho vazio!', 'error');
+        
         const dataInput = this.dom['venda-data'].value;
         const horaInput = this.dom['venda-hora'].value;
-
+        const itensCopia = [...this.state.cart]; // Evita conflito ao limpar o carrinho
+        
         const vendaData = {
             vendedor: this.dom['venda-vendedor'].value,
             faccao: this.dom['venda-faccao'].value,
-            itens: this.state.cart,
+            itens: itensCopia,
             data: new Date(`${dataInput}T${horaInput}`),
             total: this.state.cart.reduce((a, b) => a + b.total, 0),
             lucroFaccao: this.state.cart.reduce((acc, item) => acc + (item.total * 0.70) - (item.cost * item.qtd), 0),
@@ -469,10 +463,10 @@ const app = {
             if (this.state.isAdmin) this.loadDashboard();
         } catch (e) {
             console.error(e);
-            this.showToast("Erro ao salvar", "error");
+            this.showToast("Erro ao salvar no banco", "error");
         }
 
-        const embedMain = {
+        const embedMainVenda = {
             username: "TrojanHelper",
             embeds: [{
                 title: "📄 Venda Registrada",
@@ -486,8 +480,25 @@ const app = {
                 footer: { text: `Data: ${this.formatDate(dataInput)} ${horaInput}` }
             }]
         };
-        this.sendWebhook(CONFIG.WEBHOOKS.VENDAS, embedMain);
-    },
+
+        // 1. Envia para o canal principal de Vendas
+        this.sendWebhook(CONFIG.WEBHOOKS.VENDAS, embedMainVenda);
+        
+        // 2. Envia para o log resumido de Vendas
+        if (CONFIG.WEBHOOKS.LOGS_VENDAS) {
+            const itensList = vendaData.itens.map(i => `• ${i.name} (${i.qtd}x)`).join('\n');
+            const dataFormatada = this.formatDate(dataInput);
+            
+            const embedLogVenda = {
+                username: "Trojan Log",
+                embeds: [{
+                    color: 5644438,
+                    description: `**Comprador:** ${vendaData.faccao}\n**Produtos:**\n${itensList}\n**Data:** ${dataFormatada}\n**Horário:** ${horaInput}`
+                }]
+            };
+            this.sendWebhook(CONFIG.WEBHOOKS.LOGS_VENDAS, embedLogVenda);
+        }
+    }, 
 
     async loadDashboard() {
         if (!this.dom['stat-total-vendas']) return;
@@ -527,7 +538,6 @@ const app = {
         }
     },
 
-    // --- SISTEMA DE TUTORIAL ---
     getTutorialSteps() {
         return [
             { tab: 'vendas', elementId: 'area-vendedor-info', title: "1. Identificação", text: "Comece preenchendo o seu nome e a facção do cliente." },
