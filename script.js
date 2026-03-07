@@ -33,15 +33,15 @@ const CONFIG = {
         LOGS_VENDAS: "https://discord.com/api/webhooks/1478225470011998240/2XJlatv2dVIvA3BoJQmOQKtbymdAQzQjZd3J1DycA3Z03TSNJBeCvy4s-ScOpWYT3sbs"
     },
     MAT_NAMES: ["Alumínio", "Cobre", "Materiais", "Projeto"],
-    MAT_WEIGHTS: [0.01, 0.01, 0.01, 0.01]
+    MAT_WEIGHTS: [0.25, 0.25, 0.25, 0.25]
 };
 
 const CATALOG = {
-    'fn_five_seven': { name: "Fn Five Seven (PT)", category: "Pistolas",       price: { min: 55000, max: 65000 },   weight: 1.5,  cost: 10000, recipe: [10, 10, 10, 10] },
-    'hk_p7m10':      { name: "HK P7M10 (Fajuta)",  category: "Pistolas",       price: { min: 25000, max: 30000 },   weight: 1.0,  cost: 5000,  recipe: [10, 10, 10, 10] },
-    'tec_9':         { name: "Tec-9 (Sub)",        category: "Submetralhadoras", price: { min: 90000, max: 110000 },  weight: 1.75, cost: 20000, recipe: [20, 20, 20, 20] },
-    'uzi':           { name: "Uzi (Sub)",          category: "Submetralhadoras", price: { min: 120000, max: 140000 }, weight: 1.25, cost: 20000, recipe: [20, 20, 20, 20] },
-    'mtar_21':       { name: "Mtar-21 (Sub)",      category: "Submetralhadoras", price: { min: 150000, max: 170000 }, weight: 5.0,  cost: 25000, recipe: [20, 20, 20, 20] },
+    'fn_five_seven': { name: "Fn Five Seven (PT)", category: "Pistolas",       price: { min: 55000, max: 65000 },   weight: 1.5,  cost: 20000, recipe: [10, 10, 10, 10] },
+    'hk_p7m10':      { name: "HK P7M10 (Fajuta)",  category: "Pistolas",       price: { min: 25000, max: 30000 },   weight: 1.0,  cost: 1000,  recipe: [10, 10, 10, 10] },
+    'tec_9':         { name: "Tec-9 (Sub)",        category: "Submetralhadoras", price: { min: 90000, max: 110000 },  weight: 1.75, cost: 30000, recipe: [20, 20, 20, 20] },
+    'uzi':           { name: "Uzi (Sub)",          category: "Submetralhadoras", price: { min: 120000, max: 140000 }, weight: 1.25, cost: 40000, recipe: [20, 20, 20, 20] },
+    'mtar_21':       { name: "Mtar-21 (Sub)",      category: "Submetralhadoras", price: { min: 150000, max: 170000 }, weight: 5.0,  cost: 50000, recipe: [20, 20, 20, 20] },
     'ak_74':         { name: "Ak-74 (Fuzil)",      category: "Fuzis",          price: { min: 240000, max: 260000 }, weight: 8.0,  cost: 35000, recipe: [25, 25, 25, 25] },
     'g36c':          { name: "G36C (Fuzil)",       category: "Fuzis",          price: { min: 260000, max: 280000 }, weight: 8.0,  cost: 30000, recipe: [25, 25, 25, 25] },
     'ak_compact':    { name: "Ak Compact (Fuzil)", category: "Fuzis",          price: { min: 190000, max: 210000 }, weight: 2.25, cost: 40000, recipe: [25, 25, 25, 25] },
@@ -331,7 +331,7 @@ const app = {
         this.state.cart.forEach(item => {
             totalProdWeight += item.weight * item.qtd;
             if (item.recipe) {
-                const crafts = Math.ceil(item.qtd / 2);
+                const crafts = item.qtd;
                 let itemMatsHTML = "";
                 item.recipe.forEach((qtd, i) => {
                     const totalM = qtd * crafts;
