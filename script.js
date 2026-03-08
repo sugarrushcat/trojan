@@ -285,7 +285,7 @@ const app = {
         this.dom['cart-production-area'].classList.add('hidden');
     },
 
-renderCart() {
+    renderCart() {
         const container = this.dom['cart-items'];
         if (this.state.cart.length === 0) {
             container.innerHTML = '<p class="empty-msg">Carrinho vazio</p>';
@@ -322,16 +322,6 @@ renderCart() {
         <div class="cart-summary-box">
             <div class="summary-total">💸 Total: R$ ${grandTotal.toLocaleString('pt-BR')}</div>
             <div class="summary-seller">💰 Vendedor (50%): R$ ${valorVendedor.toLocaleString('pt-BR')}</div>
-            <div class="summary-faction">🔥 Facção: R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
-        </div>`;
-    },
-
-        container.innerHTML = html;
-        const faccaoNet = (grandTotal * 0.50) - totalProdCost;
-        this.dom['cart-summary-area'].innerHTML = `
-        <div class="cart-summary-box">
-            <div class="summary-total">💸 Total: R$ ${grandTotal.toLocaleString('pt-BR')}</div>
-            <div class="summary-seller">💰 Vendedor (50%): R$ ${(grandTotal * 0.30).toLocaleString('pt-BR')}</div>
             <div class="summary-faction">🔥 Facção: R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
         </div>`;
     },
@@ -459,7 +449,7 @@ renderCart() {
         }
     },
 
-async sendSaleWebhook() {
+    async sendSaleWebhook() {
         if (this.state.cart.length === 0) return this.showToast('Carrinho vazio!', 'error');
         
         const dataInput = this.dom['venda-data'].value;
@@ -514,7 +504,7 @@ async sendSaleWebhook() {
         };
 
         // 1. Envio Principal
-        this.sendWebhook(CONFIG.WEBHOOKS.VENDAS, embedMainVenda);
+        this.sendWebhook(CONFIG.WEBHOOKS.VENDAS, embedVenda);
         
         // 2. Envio Log Resumido
         if (CONFIG.WEBHOOKS.LOGS_VENDAS) {
