@@ -313,11 +313,11 @@ const app = {
         });
 
         container.innerHTML = html;
-        const faccaoNet = (grandTotal * 0.70) - totalProdCost;
+        const faccaoNet = (grandTotal * 0.50) - totalProdCost;
         this.dom['cart-summary-area'].innerHTML = `
         <div class="cart-summary-box">
             <div class="summary-total">💸 Total: R$ ${grandTotal.toLocaleString('pt-BR')}</div>
-            <div class="summary-seller">💰 Vendedor (30%): R$ ${(grandTotal * 0.30).toLocaleString('pt-BR')}</div>
+            <div class="summary-seller">💰 Vendedor (50%): R$ ${(grandTotal * 0.30).toLocaleString('pt-BR')}</div>
             <div class="summary-faction">🔥 Facção: R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
         </div>`;
     },
@@ -458,7 +458,7 @@ const app = {
             itens: itensCopia,
             data: new Date(`${dataInput}T${horaInput}`),
             total: this.state.cart.reduce((a, b) => a + b.total, 0),
-            lucroFaccao: this.state.cart.reduce((acc, item) => acc + (item.total * 0.70) - (item.cost * item.qtd), 0),
+            lucroFaccao: this.state.cart.reduce((acc, item) => acc + (item.total * 0.50) - (item.cost * item.qtd), 0),
             custoProducao: this.state.cart.reduce((acc, item) => acc + (item.cost * item.qtd), 0)
         };
 
