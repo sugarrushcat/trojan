@@ -285,7 +285,7 @@ const app = {
         this.dom['cart-production-area'].classList.add('hidden');
     },
 
-    renderCart() {
+renderCart() {
         const container = this.dom['cart-items'];
         if (this.state.cart.length === 0) {
             container.innerHTML = '<p class="empty-msg">Carrinho vazio</p>';
@@ -311,6 +311,20 @@ const app = {
                 <div class="btn-remove-item" onclick="app.removeFromCart(${idx})">&times;</div>
             </div>`;
         });
+
+        container.innerHTML = html;
+        
+        // --- MATEMÁTICA CORRETA DOS 50% AQUI ---
+        const valorVendedor = grandTotal * 0.50; 
+        const faccaoNet = (grandTotal * 0.50) - totalProdCost; 
+
+        this.dom['cart-summary-area'].innerHTML = `
+        <div class="cart-summary-box">
+            <div class="summary-total">💸 Total: R$ ${grandTotal.toLocaleString('pt-BR')}</div>
+            <div class="summary-seller">💰 Vendedor (50%): R$ ${valorVendedor.toLocaleString('pt-BR')}</div>
+            <div class="summary-faction">🔥 Facção: R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
+        </div>`;
+    },
 
         container.innerHTML = html;
         const faccaoNet = (grandTotal * 0.50) - totalProdCost;
@@ -445,21 +459,27 @@ const app = {
         }
     },
 
-    async sendSaleWebhook() {
+async sendSaleWebhook() {
         if (this.state.cart.length === 0) return this.showToast('Carrinho vazio!', 'error');
         
         const dataInput = this.dom['venda-data'].value;
         const horaInput = this.dom['venda-hora'].value;
         const itensCopia = [...this.state.cart]; 
         
+        // --- CÁLCULO PARA O BANCO DE DADOS ---
+        const totalVenda = this.state.cart.reduce((a, b) => a + b.total, 0);
+        const custoTotal = this.state.cart.reduce((acc, item) => acc + (item.cost * item.qtd), 0);
+        const valorVendedor = totalVenda * 0.50;
+        const lucroFaccao = (totalVenda * 0.50) - custoTotal;
+
         const vendaData = {
             vendedor: this.dom['venda-vendedor'].value,
             faccao: this.dom['venda-faccao'].value,
             itens: itensCopia,
             data: new Date(`${dataInput}T${horaInput}`),
-            total: this.state.cart.reduce((a, b) => a + b.total, 0),
-            lucroFaccao: this.state.cart.reduce((acc, item) => acc + (item.total * 0.50) - (item.cost * item.qtd), 0),
-            custoProducao: this.state.cart.reduce((acc, item) => acc + (item.cost * item.qtd), 0)
+            total: totalVenda,
+            lucroFaccao: lucroFaccao,
+            custoProducao: custoTotal
         };
 
         try {
@@ -472,7 +492,10 @@ const app = {
             this.showToast("Erro ao salvar no banco", "error");
         }
 
-        const embedMainVenda = {
+        // --- LAYOUT EXATO DA SUA IMAGEM ---
+        const itensFormatados = vendaData.itens.map(i => `• ${i.name} — ${i.qtd}x — R$ ${i.total.toLocaleString('pt-BR')}`).join('\n');
+
+        const embedVenda = {
             username: "TrojanHelper",
             embeds: [{
                 title: "📄 Venda Registrada",
@@ -484,9 +507,9 @@ const app = {
                     { name: "💸 Total Venda", value: `R$ ${vendaData.total.toLocaleString('pt-BR')}`, inline: true },
                     { name: "🔨 Custo Produção", value: `R$ ${vendaData.custoProducao.toLocaleString('pt-BR')}`, inline: true },
                     { name: "💰 Vendedor (50%)", value: `R$ ${valorVendedor.toLocaleString('pt-BR')}`, inline: true },
-                    { name: "🔥 Facção (Liq.)", value: `**R$ ${faccaoLiq.toLocaleString('pt-BR')}**`, inline: false }
+                    { name: "🔥 Facção (Liq.)", value: `**R$ ${vendaData.lucroFaccao.toLocaleString('pt-BR')}**`, inline: false }
                 ],
-                footer: { text: `Data: ${this.formatDate(dataInput)} ${horaInput}` }
+                footer: { text: `Data: ${this.formatDate(dataInput)} às ${horaInput}` }
             }]
         };
 
