@@ -29,8 +29,8 @@ const CONFIG = {
     WEBHOOKS: {
         ACOES: "https://discord.com/api/webhooks/1438189798849384560/lote5LpQxF80SDUZ3QdPOj2aHiQ7JtcJWKfTNxErKA0MjhDdQ86vruN74dnNUy0YMowD",
         VENDAS: "https://discord.com/api/webhooks/1434731757953093662/gElahX6G0yY6h-DVQx1RQ8wOu6IJGi-k2M20fEVOgNBy-WT3ztobwuPspLB6hLaeAy6z",
-        LOGS_ACOES: "https://discord.com/api/webhooks/1478224298576707857/8hzK-dLqXSDXX_Nf2JFVEGAagzKZP5N5W4VsT3cTPQdSMseW1pDX3Xc4gZvfZw5Ln_s6",
-        LOGS_VENDAS: "https://discord.com/api/webhooks/1478225470011998240/2XJlatv2dVIvA3BoJQmOQKtbymdAQzQjZd3J1DycA3Z03TSNJBeCvy4s-ScOpWYT3sbs"
+        LOGS_ACOES: "https://discord.com/api/webhooks/1478066884514545907/n2nF06DqEdPdvkORKyuScg2WVkCQzu_opZxaoqMjrCy7403YwKg3YH9XnRtc_U1B5f50",
+        LOGS_VENDAS: "https://discord.com/api/webhooks/1478066978374811871/tyxC5DrrDJxWlwigS2d-s-Xl04sTDtHVR-53ISuVXzMrRpN1G8YPsXwjkXpKBj4BoKkQ"
     },
     MAT_NAMES: ["Alumínio", "Cobre", "Materiais", "Projeto"],
     MAT_WEIGHTS: [0.25, 0.25, 0.25, 0.25]
