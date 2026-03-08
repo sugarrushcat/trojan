@@ -479,9 +479,12 @@ const app = {
                 color: 5644438,
                 fields: [
                     { name: "💼 Vendedor", value: vendaData.vendedor, inline: true },
-                    { name: "🏛️ Facção", value: vendaData.faccao, inline: true },
-                    { name: "📦 Itens", value: vendaData.itens.map(i => `${i.name} (${i.qtd}x)`).join('\n'), inline: false },
-                    { name: "💸 Total", value: `R$ ${vendaData.total.toLocaleString('pt-BR')}`, inline: true }
+                    { name: "🏛️ Facção Compradora", value: vendaData.faccao, inline: true },
+                    { name: "📦 Itens", value: itensFormatados, inline: false },
+                    { name: "💸 Total Venda", value: `R$ ${vendaData.total.toLocaleString('pt-BR')}`, inline: true },
+                    { name: "🔨 Custo Produção", value: `R$ ${vendaData.custoProducao.toLocaleString('pt-BR')}`, inline: true },
+                    { name: "💰 Vendedor (50%)", value: `R$ ${valorVendedor.toLocaleString('pt-BR')}`, inline: true },
+                    { name: "🔥 Facção (Liq.)", value: `**R$ ${faccaoLiq.toLocaleString('pt-BR')}**`, inline: false }
                 ],
                 footer: { text: `Data: ${this.formatDate(dataInput)} ${horaInput}` }
             }]
