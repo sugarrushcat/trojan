@@ -314,7 +314,7 @@ const app = {
 
         container.innerHTML = html;
         
-        // --- MATEMÁTICA CORRETA DOS 50% AQUI ---
+        
         const valorVendedor = grandTotal * 0.50; 
         const faccaoNet = (grandTotal * 0.50) - totalProdCost; 
 
