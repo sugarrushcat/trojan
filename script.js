@@ -314,15 +314,16 @@ const app = {
 
         container.innerHTML = html;
         
-        
-        const valorVendedor = grandTotal * 0.50; 
-        const faccaoNet = (grandTotal * 0.50) - totalProdCost; 
+        // --- NOVA MATEMÁTICA: ABATE O CUSTO PRIMEIRO E DIVIDE O LUCRO ---
+        const lucroLiquido = grandTotal - totalProdCost;
+        const valorVendedor = lucroLiquido * 0.50; 
+        const faccaoNet = lucroLiquido * 0.50; 
 
         this.dom['cart-summary-area'].innerHTML = `
         <div class="cart-summary-box">
             <div class="summary-total">💸 Total: R$ ${grandTotal.toLocaleString('pt-BR')}</div>
-            <div class="summary-seller">💰 Vendedor (50%): R$ ${valorVendedor.toLocaleString('pt-BR')}</div>
-            <div class="summary-faction">🔥 Facção: R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
+            <div class="summary-seller">💰 Vendedor (50% do Lucro): R$ ${valorVendedor.toLocaleString('pt-BR')}</div>
+            <div class="summary-faction">🔥 Facção (50% do Lucro): R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
         </div>`;
     },
 
@@ -335,7 +336,7 @@ const app = {
         this.state.cart.forEach(item => {
             totalProdWeight += item.weight * item.qtd;
             if (item.recipe) {
-                const crafts = item.qtd;
+                const crafts = item.qtd; // Agora é 1 produto por craft
                 let itemMatsHTML = "";
                 item.recipe.forEach((qtd, i) => {
                     const totalM = qtd * crafts;
@@ -456,11 +457,14 @@ const app = {
         const horaInput = this.dom['venda-hora'].value;
         const itensCopia = [...this.state.cart]; 
         
-        // --- CÁLCULO PARA O BANCO DE DADOS ---
+        // --- CÁLCULO PARA O BANCO DE DADOS E DISCORD ---
         const totalVenda = this.state.cart.reduce((a, b) => a + b.total, 0);
         const custoTotal = this.state.cart.reduce((acc, item) => acc + (item.cost * item.qtd), 0);
-        const valorVendedor = totalVenda * 0.50;
-        const lucroFaccao = (totalVenda * 0.50) - custoTotal;
+        
+        // Subtrai o custo do total para achar o lucro real, depois divide por 2
+        const lucroLiquidoTotal = totalVenda - custoTotal;
+        const valorVendedor = lucroLiquidoTotal * 0.50;
+        const lucroFaccao = lucroLiquidoTotal * 0.50;
 
         const vendaData = {
             vendedor: this.dom['venda-vendedor'].value,
@@ -482,7 +486,7 @@ const app = {
             this.showToast("Erro ao salvar no banco", "error");
         }
 
-        // --- LAYOUT EXATO DA SUA IMAGEM ---
+        // --- LAYOUT DO DISCORD ---
         const itensFormatados = vendaData.itens.map(i => `• ${i.name} — ${i.qtd}x — R$ ${i.total.toLocaleString('pt-BR')}`).join('\n');
 
         const embedVenda = {
@@ -496,7 +500,7 @@ const app = {
                     { name: "📦 Itens", value: itensFormatados, inline: false },
                     { name: "💸 Total Venda", value: `R$ ${vendaData.total.toLocaleString('pt-BR')}`, inline: true },
                     { name: "🔨 Custo Produção", value: `R$ ${vendaData.custoProducao.toLocaleString('pt-BR')}`, inline: true },
-                    { name: "💰 Vendedor (50%)", value: `R$ ${valorVendedor.toLocaleString('pt-BR')}`, inline: true },
+                    { name: "💰 Vendedor (50% Lucro)", value: `R$ ${valorVendedor.toLocaleString('pt-BR')}`, inline: true },
                     { name: "🔥 Facção (Liq.)", value: `**R$ ${vendaData.lucroFaccao.toLocaleString('pt-BR')}**`, inline: false }
                 ],
                 footer: { text: `Data: ${this.formatDate(dataInput)} às ${horaInput}` }
