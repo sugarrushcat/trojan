@@ -37,8 +37,8 @@ const CONFIG = {
 };
 
 const CATALOG = {
-    'fn_five_seven': { name: "Fn Five Seven (PT)", category: "Pistolas",       price: { min: 55000, max: 65000 },   weight: 1.5,  cost: 20000, recipe: [10, 10, 10, 10] },
-    'hk_p7m10':      { name: "HK P7M10 (Fajuta)",  category: "Pistolas",       price: { min: 25000, max: 30000 },   weight: 1.0,  cost: 1000,  recipe: [10, 10, 10, 10] },
+    'fn_five_seven': { name: "Fn Five Seven (PT)", category: "Pistolas",       price: { min: 55000, max: 65000 },   weight: 1.5,  cost: 10000, recipe: [10, 10, 10, 10] },
+    'hk_p7m10':      { name: "HK P7M10 (Fajuta)",  category: "Pistolas",       price: { min: 25000, max: 30000 },   weight: 1.0,  cost: 5000,  recipe: [10, 10, 10, 10] },
     'tec_9':         { name: "Tec-9 (Sub)",        category: "Submetralhadoras", price: { min: 90000, max: 110000 },  weight: 1.75, cost: 30000, recipe: [20, 20, 20, 20] },
     'uzi':           { name: "Uzi (Sub)",          category: "Submetralhadoras", price: { min: 120000, max: 140000 }, weight: 1.25, cost: 40000, recipe: [20, 20, 20, 20] },
     'mtar_21':       { name: "Mtar-21 (Sub)",      category: "Submetralhadoras", price: { min: 150000, max: 170000 }, weight: 5.0,  cost: 50000, recipe: [20, 20, 20, 20] },
