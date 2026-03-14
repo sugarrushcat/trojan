@@ -316,14 +316,14 @@ const app = {
         
         // --- NOVA MATEMÁTICA: ABATE O CUSTO PRIMEIRO E DIVIDE O LUCRO ---
         const lucroLiquido = grandTotal - totalProdCost;
-        const valorVendedor = lucroLiquido * 0.50; 
-        const faccaoNet = lucroLiquido * 0.50; 
+        const valorVendedor = lucroLiquido * 0.40; // 40% para o vendedor
+        const faccaoNet = lucroLiquido * 0.60;     // 60% para a facção
 
         this.dom['cart-summary-area'].innerHTML = `
         <div class="cart-summary-box">
             <div class="summary-total">💸 Total: R$ ${grandTotal.toLocaleString('pt-BR')}</div>
-            <div class="summary-seller">💰 Vendedor (50% do Lucro): R$ ${valorVendedor.toLocaleString('pt-BR')}</div>
-            <div class="summary-faction">🔥 Facção (50% do Lucro): R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
+            <div class="summary-seller">💰 Vendedor (40% do Lucro): R$ ${valorVendedor.toLocaleString('pt-BR')}</div>
+            <div class="summary-faction">🔥 Facção (60% do Lucro): R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
         </div>`;
     },
 
@@ -461,10 +461,10 @@ const app = {
         const totalVenda = this.state.cart.reduce((a, b) => a + b.total, 0);
         const custoTotal = this.state.cart.reduce((acc, item) => acc + (item.cost * item.qtd), 0);
         
-        // Subtrai o custo do total para achar o lucro real, depois divide por 2
+        // Subtrai o custo do total para achar o lucro real, depois divide em 40/60
         const lucroLiquidoTotal = totalVenda - custoTotal;
-        const valorVendedor = lucroLiquidoTotal * 0.50;
-        const lucroFaccao = lucroLiquidoTotal * 0.50;
+        const valorVendedor = lucroLiquidoTotal * 0.40; // 40% para o vendedor
+        const lucroFaccao = lucroLiquidoTotal * 0.60;   // 60% para a facção
 
         const vendaData = {
             vendedor: this.dom['venda-vendedor'].value,
@@ -500,7 +500,7 @@ const app = {
                     { name: "📦 Itens", value: itensFormatados, inline: false },
                     { name: "💸 Total Venda", value: `R$ ${vendaData.total.toLocaleString('pt-BR')}`, inline: true },
                     { name: "🔨 Custo Produção", value: `R$ ${vendaData.custoProducao.toLocaleString('pt-BR')}`, inline: true },
-                    { name: "💰 Vendedor (50% Lucro)", value: `R$ ${valorVendedor.toLocaleString('pt-BR')}`, inline: true },
+                    { name: "💰 Vendedor (40% Lucro)", value: `R$ ${valorVendedor.toLocaleString('pt-BR')}`, inline: true },
                     { name: "🔥 Facção (Liq.)", value: `**R$ ${vendaData.lucroFaccao.toLocaleString('pt-BR')}**`, inline: false }
                 ],
                 footer: { text: `Data: ${this.formatDate(dataInput)} às ${horaInput}` }
