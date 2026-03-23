@@ -297,14 +297,16 @@
             container.innerHTML = html;
             
             const lucroLiquido = grandTotal - totalProdCost;
-            const valorVendedor = lucroLiquido * 0.40;
-            const faccaoNet = lucroLiquido * 0.60;
+            
+            // Alterado para 50% para ambas as partes
+            const valorVendedor = lucroLiquido * 0.50;
+            const faccaoNet = lucroLiquido * 0.50;
 
             this.dom['cart-summary-area'].innerHTML = `
             <div class="cart-summary-box">
                 <div class="summary-total">Total: R$ ${grandTotal.toLocaleString('pt-BR')}</div>
-                <div class="summary-seller">Vendedor (40% do Lucro): R$ ${valorVendedor.toLocaleString('pt-BR')}</div>
-                <div class="summary-faction">Facção (60% do Lucro): R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
+                <div class="summary-seller">Comprador (50% do Lucro): R$ ${valorVendedor.toLocaleString('pt-BR')}</div>
+                <div class="summary-faction">Facção (50% do Lucro): R$ ${faccaoNet.toLocaleString('pt-BR')}</div>
             </div>`;
         },
 
@@ -455,8 +457,10 @@
             const custoTotal = this.state.cart.reduce((acc, item) => acc + (item.cost * item.qtd), 0);
             
             const lucroLiquidoTotal = totalVenda - custoTotal;
-            const valorVendedor = lucroLiquidoTotal * 0.40;
-            const lucroFaccao = lucroLiquidoTotal * 0.60;
+            
+            // Alterado para 50% para ambas as partes
+            const valorVendedor = lucroLiquidoTotal * 0.50;
+            const lucroFaccao = lucroLiquidoTotal * 0.50;
 
             const vendaData = {
                 vendedor: vendedor,
@@ -493,8 +497,8 @@
                         { name: "Itens", value: itensFormatados, inline: false },
                         { name: "Total Venda", value: `R$ ${vendaData.total.toLocaleString('pt-BR')}`, inline: true },
                         { name: "Custo Produção", value: `R$ ${vendaData.custoProducao.toLocaleString('pt-BR')}`, inline: true },
-                        { name: "Vendedor (40% Lucro)", value: `R$ ${valorVendedor.toLocaleString('pt-BR')}`, inline: true },
-                        { name: "Facção (Liq.)", value: `**R$ ${vendaData.lucroFaccao.toLocaleString('pt-BR')}**`, inline: false }
+                        { name: "Comprador (50% Lucro)", value: `R$ ${valorVendedor.toLocaleString('pt-BR')}`, inline: true },
+                        { name: "Facção (50% Lucro)", value: `**R$ ${vendaData.lucroFaccao.toLocaleString('pt-BR')}**`, inline: false }
                     ],
                     footer: { text: `Data: ${this.formatDate(dataInput)} às ${horaInput}` }
                 }]
