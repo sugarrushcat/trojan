@@ -1,0 +1,408 @@
+{
+  "groups": [
+    {
+      "id": "lojas",
+      "label": "Lojas e Estabelecimentos",
+      "actions": [
+        "Barbearia",
+        "Loja de Armamentos",
+        "Loja de Departamento",
+        "Açougue",
+        "Loja Samir (Bebidas)",
+        "Atom",
+        "Planet"
+      ]
+    },
+    {
+      "id": "bancos",
+      "label": "Bancos e Joalheria",
+      "actions": [
+        "Banco Fleeca",
+        "Banco Central",
+        "Joalheria",
+        "Nióbio"
+      ]
+    },
+    {
+      "id": "rua",
+      "label": "Rua e Veículos",
+      "actions": [
+        "Ações de Rua (PvP)",
+        "Fuga Limpa / Teti-Chão",
+        "Corrida Ilegal",
+        "Boosting",
+        "Roubo de Veículos / Porta-malas",
+        "Recuperação de Veículo"
+      ]
+    },
+    {
+      "id": "drogas",
+      "label": "Drogas e Roubos Menores",
+      "actions": [
+        "Mesa de Drogas",
+        "Tráfico de Drogas",
+        "ATM / Registradora / Residência",
+        "Caixa de correio"
+      ]
+    },
+    {
+      "id": "outros",
+      "label": "Outros e Especiais",
+      "actions": [
+        "Observatório",
+        "Auditório",
+        "Campo de Golf",
+        "Mergulhador",
+        "Helicrash",
+        "Sequestro / Refém / Negociação"
+      ]
+    },
+    {
+      "id": "temporario",
+      "label": "Ações de Férias (Temporário)",
+      "actions": [
+        "Hotel Abandonado",
+        "Cemitério",
+        "Motoclube",
+        "Galinheiro",
+        "Madeireira",
+        "Banco de Paleto",
+        "Aeroporto Abandonado"
+      ]
+    }
+  ],
+  "details": {
+    "Banco Central": {
+      "bandidos": "Obrigatório 10",
+      "policia": "Máximo 14",
+      "refens": "Máximo 5",
+      "armamento": "Somente Fuzil | 12: Máx 3",
+      "perimetro": "Máx 3 bandidos fora. Proibido bandidos fora se a ação for na fuga.",
+      "extras": "Negociação obrigatória (negociador não pode ser morto). Permitido 4 smokes e 3 gás.",
+      "cartao": "Cartão Azul",
+      "bgCartao": "#2563eb",
+      "textCartao": "#ffffff"
+    },
+    "Banco Fleeca": {
+      "bandidos": "Obrigatório 08",
+      "policia": "Máximo 10",
+      "refens": "Máximo 5",
+      "armamento": "Mínimo Submetralhadora | 12: 03",
+      "perimetro": "Life Invader: Máx 3 em prédios ou estac. / Praia: Teti-chão+Helidrone / Shopping: Máx 4 em prédios.",
+      "extras": "Mínimo de 3 bandidos dentro. Negociação obrigatória. Permitido 2 smokes e 2 gás.",
+      "cartao": "Cartão Azul",
+      "bgCartao": "#2563eb",
+      "textCartao": "#ffffff"
+    },
+    "Barbearia": {
+      "bandidos": "Mínimo 2, Máximo 4",
+      "policia": "Mesma quant. dos bandidos",
+      "refens": "Proibido",
+      "armamento": "Soco ou arma branca",
+      "perimetro": "Ação totalmente focada no local da barbearia.",
+      "extras": "Obrigatória a negociação. Proibido o uso de armas de fogo.",
+      "cartao": "Cartão Roxo",
+      "bgCartao": "#9333ea",
+      "textCartao": "#ffffff"
+    },
+    "Loja de Armamentos": {
+      "bandidos": "Obrigatório 2",
+      "policia": "Máximo 3",
+      "refens": "Sem reféns",
+      "armamento": "Apenas Pistolas (recomenda-se Fajuta)",
+      "perimetro": "Obr. todos dentro (exceto Life Invader/Central/China/Costureira, mas sem prédios).",
+      "extras": "Obrigatório negociação. Proibido marcar drop policial.",
+      "cartao": "Cartão Vermelho",
+      "bgCartao": "#dc2626",
+      "textCartao": "#ffffff"
+    },
+    "Loja de Departamento": {
+      "bandidos": "Obrigatório 4",
+      "policia": "Máximo 5",
+      "refens": "Obrigatório 1 refém",
+      "armamento": "Apenas Pistolas",
+      "perimetro": "Teti-Chão. Máximo de 2 bandidos fora da Loja.",
+      "extras": "Dois bandidos iniciais devem permanecer dentro. Fuga limitada a 2 carros.",
+      "cartao": "Cartão Verde",
+      "bgCartao": "#16a34a",
+      "textCartao": "#ffffff"
+    },
+    "Açougue": {
+      "bandidos": "Obrigatório 8",
+      "policia": "Máximo 11",
+      "refens": "Proibido",
+      "armamento": "Somente submetralhadora",
+      "perimetro": "Proibido veículos dentro do perímetro. Liberada a rotação após o início.",
+      "extras": "Obrigatória a negociação. Permitido 2 smokes e 1 granada de gás.",
+      "cartao": "Cartão Rosa",
+      "bgCartao": "#ec4899",
+      "textCartao": "#ffffff"
+    },
+    "Loja Samir (Bebidas)": {
+      "bandidos": "Obrigatório 3",
+      "policia": "Máximo 4",
+      "refens": "Proibido",
+      "armamento": "Apenas Pistolas",
+      "perimetro": "Teti-Chão. Proibido subir em escadas e rampas. Proibido veículos dentro.",
+      "extras": "Obrigatória a negociação.",
+      "cartao": "Cartão Verde",
+      "bgCartao": "#16a34a",
+      "textCartao": "#ffffff"
+    },
+    "Atom": {
+      "bandidos": "Obrigatório 2",
+      "policia": "Máximo 3",
+      "refens": "Proibido",
+      "armamento": "Apenas Pistolas",
+      "perimetro": "Proibido colocar veículos dentro do perímetro. Liberada a rotação.",
+      "extras": "Obrigatória a negociação.",
+      "cartao": "Cartão Vermelho",
+      "bgCartao": "#dc2626",
+      "textCartao": "#ffffff"
+    },
+    "Planet": {
+      "bandidos": "Obrigatório 5",
+      "policia": "Máximo 7",
+      "refens": "Proibido",
+      "armamento": "Apenas Pistolas",
+      "perimetro": "Teti-Chão. Proibido subir nas escadas/rampas. Proibido veículos dentro.",
+      "extras": "Obrigatória a negociação.",
+      "cartao": "Cartão Verde",
+      "bgCartao": "#16a34a",
+      "textCartao": "#ffffff"
+    },
+    "Joalheria": {
+      "bandidos": "Obrigatório 7",
+      "policia": "Máximo 9",
+      "refens": "Máximo 5",
+      "armamento": "Somente submetralhadora | 12: 2",
+      "perimetro": "Sem Refém: Máx 2 fora. Proibido Metrô e prefeitura.",
+      "extras": "Negociador não pode ser morto. 2 smokes e 1 gás. Limite de 2 veículos na fuga.",
+      "cartao": "Pendrive",
+      "bgCartao": "#4b5563",
+      "textCartao": "#ffffff"
+    },
+    "Nióbio": {
+      "bandidos": "Obrigatório 12",
+      "policia": "Máximo 22",
+      "refens": "Proibido",
+      "armamento": "Somente Fuzil e Doze | 12: 2",
+      "perimetro": "Teti-Chão. Proibido bandidos atirando de fora da ação principal.",
+      "extras": "Negociação inexistente. Proibido ser feito na fuga. Permitido 4 smokes.",
+      "cartao": "Cartão Azul",
+      "bgCartao": "#2563eb",
+      "textCartao": "#ffffff"
+    },
+    "Ações de Rua (PvP)": {
+      "bandidos": "Sem limite definido",
+      "policia": "Sem limite definido",
+      "refens": "-",
+      "armamento": "Pequeno, médio e grande porte",
+      "perimetro": "Ações iniciadas na rua devem ser finalizadas na rua. Proibido fugir para safe zones.",
+      "extras": "Proibido retornar/cobrar após finalização. Proibido atirar do porta-malas."
+    },
+    "Fuga Limpa / Teti-Chão": {
+      "bandidos": "-",
+      "policia": "-",
+      "refens": "-",
+      "armamento": "Proibido Taser / Bala de Borracha na fuga a pé",
+      "perimetro": "Teti-Chão: Proibido subir em muros ou lugares inalcançáveis a pé.",
+      "extras": "Fuga Limpa: Sem QRR, sem pit, sem abastecer, sem bater de propósito. 1 troca de veículo."
+    },
+    "Corrida Ilegal": {
+      "bandidos": "1 Veículo cheio",
+      "policia": "Máximo 3 VTRs (+Heli)",
+      "refens": "Proibido",
+      "armamento": "Proibido armamento",
+      "perimetro": "Rotas de fuga e vias.",
+      "extras": "Fuga limpa, sem abastecer ou resgate."
+    },
+    "Boosting": {
+      "bandidos": "1 VTR Boosting + 1 Suporte (máx 4)",
+      "policia": "Máximo 4 VTRs (+Heli)",
+      "refens": "-",
+      "armamento": "Livre",
+      "perimetro": "Rotas abertas de fuga.",
+      "extras": "Em caso de disparos não existe limite de policiais."
+    },
+    "Roubo de Veículos / Porta-malas": {
+      "bandidos": "1 Veículo cheio",
+      "policia": "Máximo 3 VTRs",
+      "refens": "-",
+      "armamento": "Apenas armas brancas (sem cortantes)",
+      "perimetro": "Rotas de fuga.",
+      "extras": "Fuga Limpa. Proibido agarrar no H em fuga a pé."
+    },
+    "Recuperação de Veículo": {
+      "bandidos": "Mínimo 5 membros",
+      "policia": "-",
+      "refens": "-",
+      "armamento": "Livre",
+      "perimetro": "Local onde o veículo está guardado/sendo recuperado.",
+      "extras": "Ação visa apenas recuperar. Sem pedir ajuda e sem voltar após a morte."
+    },
+    "Mesa de Drogas": {
+      "bandidos": "Mínimo 5",
+      "policia": "Contingente máximo",
+      "refens": "Proibido",
+      "armamento": "Livre",
+      "perimetro": "Teti-chão. Proibido veículos dentro e sair da área.",
+      "extras": "Negociação inexistente. Proibido juntar facções."
+    },
+    "Tráfico de Drogas": {
+      "bandidos": "1 VTR (máx 4) + QRR",
+      "policia": "Máximo 3 VTRs (+Heli)",
+      "refens": "Proibido",
+      "armamento": "Livre (Se houver disparos, polícia sem limites)",
+      "perimetro": "Rotas abertas de acompanhamento.",
+      "extras": "Fuga limpa. Proibido cop bait e ajuda externa."
+    },
+    "ATM / Registradora / Residência": {
+      "bandidos": "1 Veículo (máx 4)",
+      "policia": "Máximo 3 VTRs",
+      "refens": "-",
+      "armamento": "Armas brancas (Sem cortantes)",
+      "perimetro": "Fuga aberta pelas vias.",
+      "extras": "Fuga limpa, sem levar pessoas no porta-malas."
+    },
+    "Caixa de correio": {
+      "bandidos": "1 Veículo cheio",
+      "policia": "Máximo 3 VTRs (+Heli)",
+      "refens": "-",
+      "armamento": "Armas brancas (Sem cortantes)",
+      "perimetro": "Fuga limpa.",
+      "extras": "Polícia tem acesso a Taser após 3 avisos na fuga a pé."
+    },
+    "Observatório": {
+      "bandidos": "Obrigatório 10",
+      "policia": "Máximo 14",
+      "refens": "Proibido",
+      "armamento": "Apenas Pistolas",
+      "perimetro": "Teti-chão. Proibido veículos dentro do perímetro. Rotação liberada.",
+      "extras": "Obrigatória a negociação.",
+      "cartao": "Cartão Verde",
+      "bgCartao": "#16a34a",
+      "textCartao": "#ffffff"
+    },
+    "Auditório": {
+      "bandidos": "Obrigatório 6",
+      "policia": "Máximo 8",
+      "refens": "Proibido",
+      "armamento": "Apenas Pistolas",
+      "perimetro": "Teti-chão. Proibido veículos dentro do perímetro. Rotação liberada.",
+      "extras": "Obrigatória a negociação.",
+      "cartao": "Cartão Verde",
+      "bgCartao": "#16a34a",
+      "textCartao": "#ffffff"
+    },
+    "Campo de Golf": {
+      "bandidos": "Obrigatório 6",
+      "policia": "Máximo 7",
+      "refens": "Proibido",
+      "armamento": "Apenas Pistolas",
+      "perimetro": "Teti-chão. Proibido escadas/rampa. Proibido veículos na área.",
+      "extras": "Obrigatória a negociação. Rotação liberada.",
+      "cartao": "Cartão Verde",
+      "bgCartao": "#16a34a",
+      "textCartao": "#ffffff"
+    },
+    "Mergulhador": {
+      "bandidos": "Obrigatório 6",
+      "policia": "Máximo 8",
+      "refens": "Proibido",
+      "armamento": "Apenas Pistolas",
+      "perimetro": "Teti-chão. Proibido escadas/rampa. Proibido veículos na área.",
+      "extras": "Obrigatória a negociação. Rotação liberada.",
+      "cartao": "Cartão Verde",
+      "bgCartao": "#16a34a",
+      "textCartao": "#ffffff"
+    },
+    "Helicrash": {
+      "bandidos": "Sem Limites",
+      "policia": "-",
+      "refens": "Proibido",
+      "armamento": "Escolhido no dia da ação",
+      "perimetro": "Disparos e combates devem acontecer DENTRO da zona vermelha. Proibido veículos lá dentro.",
+      "extras": "Não pode retornar após morrer e não pode cobrar a ação depois. Obrigatório roupa da facção."
+    },
+    "Sequestro / Refém / Negociação": {
+      "bandidos": "Sempre em maior número",
+      "policia": "Negociável",
+      "refens": "1 refém a cada 2 bandidos",
+      "armamento": "Livre",
+      "perimetro": "Definido pela ação de sequestro.",
+      "extras": "Proibido fingir que existe refém ou ser refém. Obrigatório algemas."
+    },
+    "Hotel Abandonado": {
+      "bandidos": "4",
+      "policia": "5",
+      "refens": "Sem reféns",
+      "armamento": "Pistola",
+      "perimetro": "Ocorrendo apenas no local designado do Hotel.",
+      "extras": "Ação de férias. Sem negociação e sem fugas."
+    },
+    "Cemitério": {
+      "bandidos": "Mínimo 6, Máximo 10",
+      "policia": "Mesma quantidade dos bandidos",
+      "refens": "-",
+      "armamento": "Arma branca",
+      "perimetro": "Área do Cemitério.",
+      "extras": "Ação de Férias.",
+      "cartao": "Cartão Roxo",
+      "bgCartao": "#9333ea",
+      "textCartao": "#ffffff"
+    },
+    "Motoclube": {
+      "bandidos": "Máximo 6",
+      "policia": "Máximo 8",
+      "refens": "-",
+      "armamento": "Pistola",
+      "perimetro": "Área do Motoclube.",
+      "extras": "Ação de Férias."
+    },
+    "Galinheiro": {
+      "bandidos": "10",
+      "policia": "14",
+      "refens": "Sem reféns",
+      "armamento": "Pistola",
+      "perimetro": "Permitido 4 bandidos fora da área principal.",
+      "extras": "Sem negociação e sem fugas. Permitido 3 smokes e 2 granadas de gás.",
+      "cartao": "Cartão Verde",
+      "bgCartao": "#16a34a",
+      "textCartao": "#ffffff"
+    },
+    "Madeireira": {
+      "bandidos": "8",
+      "policia": "11",
+      "refens": "Sem reféns",
+      "armamento": "Fuzil",
+      "perimetro": "Ação restrita à Madeireira.",
+      "extras": "Sem negociação e sem fugas. Permitido 3 smokes e 2 granadas de gás.",
+      "cartao": "Cartão Amarelo",
+      "bgCartao": "#eab308",
+      "textCartao": "#000000"
+    },
+    "Banco de Paleto": {
+      "bandidos": "12",
+      "policia": "Máximo 18",
+      "refens": "Máximo 6",
+      "armamento": "Somente Fuzil | 12: 2 (Polícia)",
+      "perimetro": "Obrigatório que pelo menos 6 fiquem dentro do banco.",
+      "extras": "Ação de Férias. Negociação Obrigatória. Permitido 6 smokes e 4 granadas de gás.",
+      "cartao": "Cartão Azul",
+      "bgCartao": "#2563eb",
+      "textCartao": "#ffffff"
+    },
+    "Aeroporto Abandonado": {
+      "bandidos": "6",
+      "policia": "10",
+      "refens": "-",
+      "armamento": "Apenas Pistolas (PT)",
+      "perimetro": "Teti-Chão. Proibido veículos dentro do perímetro.",
+      "extras": "Ação de férias. Sem negociação. Permitido 2 smokes.",
+      "cartao": "Cartão Verde",
+      "bgCartao": "#16a34a",
+      "textCartao": "#ffffff"
+    }
+  }
+}
